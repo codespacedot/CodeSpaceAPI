@@ -2,10 +2,10 @@
 
 <div align="center">
 <img src="./images/codespace.png" width="70%">
-<h2>
+<h1>
 <span>
 API
 </span>
-</h2>
+</h1>
 
 Backend/API for the CodeSpace Application.
