@@ -12,3 +12,6 @@ venv/
 
 # .gitignore
 .gitignore
+
+# pytest
+.pytest_cache/
