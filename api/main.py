@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 
-app = FastAPI(title='CodeSpace api', description='api for csdot.ml', version='0.1', docs_url='/')
+app = FastAPI(title='CodeSpace API', description='api for csdot.ml', version='0.1', docs_url='/')
 
 
 @app.get('/api')
