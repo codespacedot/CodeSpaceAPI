@@ -35,6 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
+        export DATABASE_KEY=${{ secrets.DATABASE_KEY }}
         pytest
     - name: Deploy to Heroku
       env:
