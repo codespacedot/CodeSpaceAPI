@@ -1,9 +1,13 @@
 from . import db
+from fastapi import HTTPException, status
 
 
-def get_data_for_year(year: str):
+def get_data_for_year(year: int):
     subjects = db.get_subjects(year=year)
     labs = db.get_labs(year=year)
+
+    if not subjects or not labs:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid year")
 
     data = {
         'ODD_SEMESTER': {
