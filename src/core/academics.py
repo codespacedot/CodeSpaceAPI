@@ -2,7 +2,7 @@ from . import db
 from fastapi import HTTPException, status
 
 
-def get_data_for_year(year: int):
+def get_data_for_year(year: str):
     subjects = db.get_subjects(year=year)
     labs = db.get_labs(year=year)
 

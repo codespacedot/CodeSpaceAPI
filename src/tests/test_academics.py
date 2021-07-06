@@ -5,7 +5,7 @@ client = TestClient(app)
 
 
 def test_get_year_200():
-    response = client.get('/academics/year/4')
+    response = client.get('/academics/year/final')
     assert response.status_code == 200
     assert response.json()['EVEN_SEMESTER']['LABS'] == [
         {
