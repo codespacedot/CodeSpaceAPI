@@ -1,8 +1,34 @@
-from . import db
+"""Core functionalities of Academics API.
+"""
+
+# Author Info
+__author__ = 'Vishwajeet Ghatage'
+__date__ = '06/07/21'
+__email__ = 'cloudmail.vishwajeet@gmail.com'
+
+# Library Imports
 from fastapi import HTTPException, status
+from typing import Dict
+
+# Own Imports
+from . import db
 
 
-def get_data_for_year(year: int):
+def get_data_for_year(year: str) -> Dict:
+    """Get subjects and labs for specified year.
+
+    Arguments:
+    ---------
+        year: Academic year.
+
+    Returns:
+    ---------
+        Dictionary containing dictionary for each semester.
+
+    Raises:
+    ---------
+        HTTPException 404 if year is invalid.
+    """
     subjects = db.get_subjects(year=year)
     labs = db.get_labs(year=year)
 
