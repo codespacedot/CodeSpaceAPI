@@ -11,28 +11,16 @@ from fastapi import APIRouter, status
 
 # Own Imports
 from src.core import academics as core
+from src.models import academics as models
 
 router = APIRouter(prefix='/academics', tags=['Academics'])
 
 
-@router.get('/year/{year}', status_code=status.HTTP_200_OK)
+@router.get('/year/{year}', response_model=models.Year, status_code=status.HTTP_200_OK)
 def data_for_year(year: str):
     """Get subjects and labs for specified academic year.
 
-    Parameters:
-    ----------
-        year: second / third / final
-
-    Response:
-    ----------
-        {
-        'ODD_SEMESTER': {
-            'SUBJECTS': [],
-            'LABS': []
-        },
-        'EVEN_SEMESTER': {
-            'SUBJECTS': [],
-            'LABS': []
-        }
+    YEAR = [2, 3, 4]
+    ----
     """
     return core.get_data_for_year(year)

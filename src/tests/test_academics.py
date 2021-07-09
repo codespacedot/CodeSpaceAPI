@@ -23,16 +23,12 @@ def test_get_year_200():
         {
             "abbreviation": "SC",
             "key": "CS422L",
-            "name": "Soft Computing Lab",
-            "semester": 8,
-            "year": 4
+            "name": "Soft Computing Lab"
         },
         {
             "abbreviation": "WT-2",
             "key": "CS426L",
-            "name": "Web Technology Lab",
-            "semester": 8,
-            "year": 4
+            "name": "Web Technology Lab"
         }
     ]
 
