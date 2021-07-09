@@ -14,7 +14,7 @@ from typing import Dict
 from . import db
 
 
-def get_data_for_year(year: str) -> Dict:
+def get_data_for_year(year: int) -> Dict:
     """Get subjects and labs for specified year.
 
     Arguments:
@@ -33,7 +33,8 @@ def get_data_for_year(year: str) -> Dict:
     labs = db.get_labs(year=year)
 
     if not subjects or not labs:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid year")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail={'ERROR': 'Invalid Year', 'MESSAGE': 'Use 2, 3 or 4'})
 
     data = {
         'ODD_SEMESTER': {
