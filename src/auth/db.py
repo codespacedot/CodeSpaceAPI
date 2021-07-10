@@ -28,7 +28,7 @@ def create_user(first_name: str, last_name: str, email: str, hashed_password: st
         'is_staff': is_staff
     }
     USERS.put(new_user)
-    return new_user
+    return next(USERS.fetch({'email': email}))[0]
 
 
 def get_user(email: str) -> Union[Dict, None]:
@@ -36,3 +36,11 @@ def get_user(email: str) -> Union[Dict, None]:
     if lst:
         return lst[0]
     return None
+
+
+def delete_user(key: str) -> bool:
+    user = USERS.get(key)
+    if not user:
+        return False
+    USERS.delete(key)
+    return True

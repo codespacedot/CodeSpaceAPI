@@ -30,9 +30,20 @@ def create_user(user_in: models.UserIn):
     if db.get_user(user_in.email):
         raise HTTPException(status.HTTP_409_CONFLICT, detail={'ERROR': 'User already exists.'})
     hashed_password = encrypt_password(user_in.password)
-    user_in_db = models.UserInDB(**user_in.dict(), hashed_password=hashed_password)
+    user_in_db = models.UserDBIn(**user_in.dict(), hashed_password=hashed_password)
     return db.create_user(**user_in_db.dict())
 
 
-def get_user():
-    pass
+def login_user(user_in: models.UserLoginIn):
+    user = db.get_user(user_in.email)
+    if not user:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
+    if not verify_password(user_in.password, user['password']):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid credentials.'})
+    return user
+
+
+def delete_user(key: str):
+    if not db.delete_user(key):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
+    return {'detail': 'User deleted.'}

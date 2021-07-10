@@ -20,10 +20,19 @@ class UserIn(UserBase):
     password: str
 
 
-class UserInDB(UserBase):
+class UserDBIn(UserBase):
     hashed_password: str
 
 
 class UserOut(UserBase):
+    key: str
+
+
+class UserLoginIn(BaseModel):
+    email: str
+    password: str
+
+
+class UserLoginOut(UserOut):
     is_admin: bool
     is_staff: bool
