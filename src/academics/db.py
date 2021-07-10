@@ -1,5 +1,4 @@
-"""Database operations using Deta Base SDK.
-https://docs.deta.sh/docs/base/sdk
+"""Database operations for Academics API.
 """
 
 # Author Info
@@ -51,7 +50,7 @@ def get_subjects(year: Optional[int] = -1) -> Union[List[Dict], None]:
         return next(SUBJECTS.fetch())
     if year not in {2, 3, 4}:
         return None
-    return next(SUBJECTS.fetch({'year': year}))
+    return next(SUBJECTS.fetch(query={'year': year}))
 
 
 def get_labs(year: Optional[int] = -1) -> Union[List[Dict], None]:
@@ -71,4 +70,4 @@ def get_labs(year: Optional[int] = -1) -> Union[List[Dict], None]:
         return next(LABS.fetch())
     if year not in {2, 3, 4}:
         return None
-    return next(LABS.fetch({'year': year}))
+    return next(LABS.fetch(query={'year': year}))

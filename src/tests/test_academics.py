@@ -21,20 +21,20 @@ def test_get_year_200():
     assert response.status_code == 200
     assert response.json()['EVEN_SEMESTER']['LABS'] == [
         {
-            "abbreviation": "SC",
-            "key": "CS422L",
-            "name": "Soft Computing Lab"
+            'abbreviation': "SC",
+            'key': 'CS422L',
+            'name': 'Soft Computing Lab'
         },
         {
-            "abbreviation": "WT-2",
-            "key": "CS426L",
-            "name": "Web Technology Lab"
+            'abbreviation': 'WT-2',
+            'key': 'CS426L',
+            'name': 'Web Technology Lab'
         }
     ]
 
 
-# Test for unsuccessful response for year data
+# Test for not found response for year data
 def test_get_year_404():
     response = client.get('/academics/year/0')
     assert response.status_code == 404
-    assert response.json() == {"detail": {"ERROR": "Invalid Year", "MESSAGE": "Use 2, 3 or 4"}}
+    assert response.json() == {'detail': {'ERROR': 'Invalid Year', 'MESSAGE': 'Use 2, 3 or 4'}}

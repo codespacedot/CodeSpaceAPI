@@ -12,20 +12,20 @@ from typing import List
 
 
 class Subject(BaseModel):
-    """To be used inside semester."""
+    """Used inside semester."""
     key: str
     name: str
 
 
 class Lab(BaseModel):
-    """To be used inside semester."""
+    """Used inside semester."""
     key: str
     name: str
     abbreviation: str
 
 
 class Semester(BaseModel):
-    """To be used inside year."""
+    """Used inside year."""
     SUBJECTS: List[Subject]
     LABS: List[Lab]
 
