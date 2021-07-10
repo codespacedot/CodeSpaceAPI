@@ -17,5 +17,5 @@ from .users.routes import user_router
 app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.1', docs_url='/')
 
 # Routers
-app.include_router(user_router)  # Authentication API
+app.include_router(user_router)  # User API
 app.include_router(academic_router)  # Academic API

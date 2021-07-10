@@ -1,4 +1,4 @@
-"""Pydantic schemas for Auth API.
+"""Pydantic schemas for Users API.
 """
 
 # Author Info
@@ -8,37 +8,36 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from pydantic import BaseModel
-from typing import Optional
 
 
 class UserBase(BaseModel):
+    """Base User model."""
+    email: str
+
+
+class UserCreate(UserBase):
+    """Used to create user.
+
+    Note:
+    ---------
+    Password encryption must be performed at front end.
+    """
     first_name: str
     last_name: str
-    email: str
-
-
-class UserIn(UserBase):
     password: str
 
 
-class UserDBIn(UserBase):
-    hashed_password: str
+class UserLogin(UserBase):
+    """Used to login user.
 
-
-class UserOut(UserBase):
-    key: str
-
-
-class UserLoginIn(BaseModel):
-    email: str
+    Note:
+    ---------
+    Password encryption must be performed at front end.
+    """
     password: str
-
-
-class UserLoginOut(UserOut):
-    is_admin: bool
-    is_staff: bool
 
 
 class Token(BaseModel):
+    """JWT Token."""
     access_token: str
     token_type: str
