@@ -4,17 +4,20 @@ https://docs.deta.sh/docs/base/sdk
 
 # Author Info
 __author__ = 'Vishwajeet Ghatage'
-__date__ = '06/07/21'
+__date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from deta import Deta
-from decouple import config
 from typing import Dict, List, Optional, Union
 
-DB = Deta(config('DATABASE_KEY'))  # Deta access Key
-SUBJECTS = DB.Base('subject')  # Base, similar to collection in MongoDB
-LABS = DB.Base('lab')
+# Own Imports
+from .. import settings
+
+
+deta = Deta(settings.DETA_ACCESS_KEY)
+SUBJECTS = deta.Base(settings.BASE_SUBJECT)  # Base, similar to collection in MongoDB
+LABS = deta.Base(settings.BASE_LAB)
 
 
 def get_subject(code: str) -> Dict:
