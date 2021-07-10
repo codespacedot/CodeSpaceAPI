@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from src.main import app
 
 client = TestClient(app)
+access_token = ''
 
 
 # Test for successful response for create user
@@ -41,18 +42,20 @@ def test_create_user_409():
 
 # Test for successful response for user login
 def test_login_user_200():
-    response = client.post('/users/login', json={
+    global access_token
+    response = client.post('/users/login', data={
         'username': 'foo.bar@example.com',
         'password': 'password'
     })
     assert response.status_code == 200
     assert 'access_token' in response.json()
+    access_token = response.json()['access_token']
 
 
 # Test for invalid response for user login
 def test_login_user_400():
     response = client.post('/users/login', data={
-        'email': 'foo.bar@example.com',
+        'username': 'foo.bar@example.com',
         'password': 'pass1234'
     })
     assert response.status_code == 400
@@ -61,13 +64,15 @@ def test_login_user_400():
 
 # Test for successful response for delete user
 def test_delete_user_200():
-    response = client.delete(f'/users/delete')
+    response = client.delete(f'/users/delete', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
     assert response.status_code == 200
     assert response.json() == {'detail': 'User deleted.'}
 
 
-# Test for not found response for delete user
-def test_delete_user_404():
+# Test for not authenticated response for delete user
+def test_delete_user_401():
     response = client.delete(f'/users/delete')
     assert response.status_code == 401
-    assert response.json() == {'detail': {'ERROR': "User doesn't exists."}}
+    assert response.json() == {'detail': 'Not authenticated'}
