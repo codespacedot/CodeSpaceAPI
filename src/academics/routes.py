@@ -10,17 +10,17 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 from fastapi import APIRouter, status
 
 # Own Imports
-from src.core import academics as core
-from src.models import academics as models
-
-router = APIRouter(prefix='/academics', tags=['Academics'])
+from . import main, models
 
 
-@router.get('/year/{year}', response_model=models.Year, status_code=status.HTTP_200_OK)
+academics_router = APIRouter(prefix='/academics', tags=['Academics'])
+
+
+@academics_router.get('/year/{year}', response_model=models.Year, status_code=status.HTTP_200_OK)
 def data_for_year(year: int):
     """Get subjects and labs for specified academic year.
 
     YEAR = [2, 3, 4]
     ----
     """
-    return core.get_data_for_year(year)
+    return main.get_data_for_year(year)
