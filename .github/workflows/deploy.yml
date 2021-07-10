@@ -33,14 +33,12 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Add environment variables
+    - name: Test with pytest
       run: |
         export DETA_ACCESS_KEY=${{ secrets.DETA_ACCESS_KEY }}
         export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
         export JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
         export JWT_EXPIRE_MINUTES=${{ secrets.JWT_EXPIRE_MINUTES }}
-    - name: Test with pytest
-      run: |
         pytest -v
     - name: Deploy to Heroku
       env:
