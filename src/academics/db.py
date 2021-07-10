@@ -1,5 +1,4 @@
-"""Database operations using Deta Base SDK.
-https://docs.deta.sh/docs/base/sdk
+"""Database operations for Academics API.
 """
 
 # Author Info

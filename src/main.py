@@ -11,9 +11,11 @@ from fastapi import FastAPI
 
 # Own Imports
 from .academics.routes import academics_router
+from .auth.routes import auth_router
 
 # FastAPI app
 app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.1', docs_url='/')
 
 # Routers
+app.include_router(auth_router)  # Authentication API
 app.include_router(academics_router)  # Academic API
