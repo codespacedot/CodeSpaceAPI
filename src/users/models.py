@@ -8,6 +8,7 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from pydantic import BaseModel
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -36,3 +37,8 @@ class UserLoginIn(BaseModel):
 class UserLoginOut(UserOut):
     is_admin: bool
     is_staff: bool
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

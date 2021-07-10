@@ -10,12 +10,12 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 from fastapi import FastAPI
 
 # Own Imports
-from .academics.routes import academics_router
-from .auth.routes import auth_router
+from .academics.routes import academic_router
+from .users.routes import user_router
 
 # FastAPI app
 app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.1', docs_url='/')
 
 # Routers
-app.include_router(auth_router)  # Authentication API
-app.include_router(academics_router)  # Academic API
+app.include_router(user_router)  # Authentication API
+app.include_router(academic_router)  # Academic API

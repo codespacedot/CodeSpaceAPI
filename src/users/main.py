@@ -9,11 +9,10 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 # Library Imports
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
-from typing import Dict
+from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
-from . import db, models
-
+from . import db, models, oauth2
 
 CRYPT_CONTEXT = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -34,13 +33,15 @@ def create_user(user_in: models.UserIn):
     return db.create_user(**user_in_db.dict())
 
 
-def login_user(user_in: models.UserLoginIn):
-    user = db.get_user(user_in.email)
+def login_user(user_data: OAuth2PasswordRequestForm):
+    user = db.get_user(user_data.username)
     if not user:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
-    if not verify_password(user_in.password, user['password']):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid credentials.'})
-    return user
+    if not verify_password(user_data.password, user['password']):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid password.'})
+
+    access_token = oauth2.create_access_token(data={'sub': user_data.username})
+    return {'access_token': access_token, 'token_type': 'bearer'}
 
 
 def delete_user(key: str):
