@@ -7,13 +7,12 @@ __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from fastapi import APIRouter, status, Depends
-from fastapi.security import OAuth2PasswordRequestForm
 from typing import Dict
+from fastapi import APIRouter, Depends, status
+from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
 from . import main, models, oauth2
-
 
 user_router = APIRouter(prefix='/users', tags=['Users'])
 

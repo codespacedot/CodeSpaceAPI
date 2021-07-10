@@ -7,8 +7,8 @@ __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from fastapi import HTTPException, status
 from typing import Dict
+from fastapi import HTTPException, status
 
 # Own Imports
 from . import db

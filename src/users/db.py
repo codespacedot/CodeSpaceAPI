@@ -7,8 +7,8 @@ __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from deta import Deta
 from typing import Dict, Union
+from deta import Deta
 
 # Own Imports
 from .. import settings
