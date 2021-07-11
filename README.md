@@ -1,4 +1,5 @@
 #
+
 <div align="center">
 <img src="/images/codespace.png" width="70%">
 <h1>
@@ -11,6 +12,7 @@ API
 Backend/API for the CodeSpace Application.
 
 ---
+
 ### [Commit Message Guide](/COMMIT_MESSAGE.md)
 
 

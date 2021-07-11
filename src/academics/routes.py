@@ -12,7 +12,6 @@ from fastapi import APIRouter, status
 # Own Imports
 from . import main, models
 
-
 academic_router = APIRouter(prefix='/academics', tags=['Academics'])
 
 

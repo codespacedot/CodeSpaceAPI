@@ -8,14 +8,15 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from datetime import datetime, timedelta
-from fastapi import HTTPException, status, Depends
-from jose import JWTError, jwt
-from fastapi.security import OAuth2PasswordBearer
 from typing import Dict
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+
 # Own Imports
-from . import db
 from .. import settings
+from . import db
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl='users/login')  # login url
 

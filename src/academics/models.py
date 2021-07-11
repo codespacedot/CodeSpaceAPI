@@ -7,8 +7,8 @@ __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from pydantic import BaseModel
 from typing import List
+from pydantic import BaseModel
 
 
 class Subject(BaseModel):
