@@ -3,7 +3,7 @@
 
 # Author Info
 __author__ = 'Vishwajeet Ghatage'
-__date__ = '10/07/21'
+__date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
@@ -19,7 +19,11 @@ user_router = APIRouter(prefix='/users', tags=['Users'])
 
 @user_router.post('/create', status_code=status.HTTP_201_CREATED)
 async def create_user(user: models.UserCreate):
-    """Create new user."""
+    """Create new user.
+
+    DOB and PASSWORD: Should be encrypted at front end.
+    ---
+    """
     return main.create_user(user=user)
 
 

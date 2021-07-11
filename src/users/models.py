@@ -3,7 +3,7 @@
 
 # Author Info
 __author__ = 'Vishwajeet Ghatage'
-__date__ = '10/07/21'
+__date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
@@ -20,10 +20,11 @@ class UserCreate(UserBase):
 
     Note:
     ---------
-    Password encryption must be performed at front end.
+    Password and dob encryption must be performed at front end.
     """
     first_name: str
     last_name: str
+    dob: str
     password: str
 
 

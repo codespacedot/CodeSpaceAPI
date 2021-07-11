@@ -3,7 +3,7 @@
 
 # Author Info
 __author__ = 'Vishwajeet Ghatage'
-__date__ = '10/07/21'
+__date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
@@ -17,7 +17,7 @@ deta = Deta(settings.DETA_ACCESS_KEY)
 USERS = deta.Base(settings.BASE_USER)  # Base, similar to collection in MongoDB
 
 
-def create_user(first_name: str, last_name: str, email: str, password: str) -> bool:
+def create_user(first_name: str, last_name: str, email: str, dob: str, password: str) -> bool:
     """Create new user.
 
     Arguments:
@@ -25,6 +25,7 @@ def create_user(first_name: str, last_name: str, email: str, password: str) -> b
         first_name: User's first name.
         last_name: User's last name.
         email: User's email id.
+        dob: Date of birth, must be encrypted/hashed at frontend.
         password: Password must be encrypted/hashed at frontend.
 
     Returns:
@@ -36,6 +37,7 @@ def create_user(first_name: str, last_name: str, email: str, password: str) -> b
         'last_name': last_name,
         'email': email,
         'password': password,
+        'dob': dob,
         'is_admin': False,
     }
     try:
