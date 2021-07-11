@@ -34,11 +34,13 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
+        env:
+          DETA_ACCESS_KEY: ${{ secrets.DETA_ACCESS_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          MAIL_ID: ${{ secrets.MAIL_ID }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
         run: |
-          export DETA_ACCESS_KEY=${{ secrets.DETA_ACCESS_KEY }}
-          export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-          export JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
-          export JWT_EXPIRE_MINUTES=${{ secrets.JWT_EXPIRE_MINUTES }}
           pytest -v
       - name: Deploy to Heroku
         env:

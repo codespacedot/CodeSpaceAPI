@@ -8,19 +8,23 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict
-from fastapi import HTTPException, status
+from fastapi import BackgroundTasks, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
 from . import db, models, oauth2
+from .. import email
 
 
-def create_user(user: models.UserCreate) -> Dict:
+def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
     """Create user.
+
+    If User gets created, send welcome email to registered email id.
 
     Arguments:
     ---------
         user: UserCreate model.
+        task: Background tasks for sending email.
 
     Returns:
     ---------
@@ -34,6 +38,7 @@ def create_user(user: models.UserCreate) -> Dict:
     if db.get_user_by_email(email=user.email):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail={'ERROR': 'User already exists.'})
     if db.create_user(**user.dict()):
+        email.send_welcome_email(background_tasks=task, email_to=user.email, name=user.first_name)
         return {'detail': 'User created.'}
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
