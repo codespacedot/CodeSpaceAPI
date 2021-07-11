@@ -8,7 +8,7 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
@@ -18,13 +18,13 @@ user_router = APIRouter(prefix='/users', tags=['Users'])
 
 
 @user_router.post('/create', status_code=status.HTTP_201_CREATED)
-async def create_user(user: models.UserCreate):
-    """Create new user.
+async def create_user(user: models.UserCreate, background_task: BackgroundTasks):
+    """Create new user and send welcome email.
 
     DOB and PASSWORD: Should be encrypted at front end.
     ---
     """
-    return main.create_user(user=user)
+    return main.create_user(user=user, task=background_task)
 
 
 @user_router.delete('/delete', status_code=status.HTTP_200_OK)
