@@ -19,7 +19,7 @@ access_token = ''
 
 # Test for successful response for create user
 def test_create_user_201():
-    response = client.post('/users/create', json={
+    response = client.post('/api/users/create', json={
         'first_name': TestUser.F_NAME,
         'last_name': TestUser.L_NAME,
         'email': TestUser.EMAIL,
@@ -32,7 +32,7 @@ def test_create_user_201():
 
 # Test for conflict response for create user
 def test_create_user_409():
-    response = client.post('/users/create', json={
+    response = client.post('/api/users/create', json={
         'first_name': TestUser.F_NAME,
         'last_name': TestUser.L_NAME,
         'email': TestUser.EMAIL,
@@ -46,7 +46,7 @@ def test_create_user_409():
 # Test for successful response for user login
 def test_login_user_200():
     global access_token
-    response = client.post('/users/login', data={
+    response = client.post('/api/users/login', data={
         'username': TestUser.EMAIL,
         'password': TestUser.PASSWORD
     })
@@ -57,7 +57,7 @@ def test_login_user_200():
 
 # Test for invalid response for user login
 def test_login_user_400():
-    response = client.post('/users/login', data={
+    response = client.post('/api/users/login', data={
         'username': 'foo.bar@example.com',
         'password': 'pass1234'
     })
@@ -67,7 +67,7 @@ def test_login_user_400():
 
 # Test for successful response for change password
 def test_change_password_200():
-    response = client.put('/users/password/change', json={'new_password': 'pass1234'},
+    response = client.put('/api/users/password/change', json={'new_password': 'pass1234'},
                           headers={'Authorization': f'Bearer {access_token}'})
     # assert response.status_code == 200
     assert response.json() == {'detail': 'Password updated.'}
@@ -75,7 +75,7 @@ def test_change_password_200():
 
 # Test for successful response for delete user
 def test_delete_user_200():
-    response = client.delete('/users/delete', headers={
+    response = client.delete('/api/users/delete', headers={
         'Authorization': f'Bearer {access_token}'
     })
     assert response.status_code == 200
@@ -84,6 +84,6 @@ def test_delete_user_200():
 
 # Test for not authenticated response for delete user
 def test_delete_user_401():
-    response = client.delete('/users/delete')
+    response = client.delete('/api/users/delete')
     assert response.status_code == 401
     assert response.json() == {'detail': 'Not authenticated'}
