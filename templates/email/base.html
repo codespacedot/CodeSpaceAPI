@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div id="greeting" style="font-family:'Ubuntu',serif;">
+    <p style="font-size:20px;">Hello {{ body.name }},</p>
+</div>
+
+<div id="message" style="font-family:'Ubuntu',serif; line-height: 0.5;">
+    {% block message %}
+    {% endblock %}
+</div>
+
+<div id="signature" style="font-family:'Ubuntu',serif; margin-top: 40px; line-height: 0.5;">
+    <p>_</p>
+    <p>Regards,</p>
+    <p style="margin-top: 28px;">CodeSpace Team</p>
+    <p><strong>Connect. <a href="" style="text-decoration: none; color: #0761d1;">Code.</a> Execute.</strong></p>
+</div>
+</body>
+</html>
