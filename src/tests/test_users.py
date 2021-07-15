@@ -9,7 +9,7 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 # Library Imports
 from fastapi.testclient import TestClient
 
-# Own Imports 
+# Own Imports
 from src.main import app
 from src.settings import TestUser
 
@@ -67,7 +67,7 @@ def test_login_user_400():
 
 # Test for successful response for delete user
 def test_delete_user_200():
-    response = client.delete(f'/users/delete', headers={
+    response = client.delete('/users/delete', headers={
         'Authorization': f'Bearer {access_token}'
     })
     assert response.status_code == 200
@@ -76,6 +76,6 @@ def test_delete_user_200():
 
 # Test for not authenticated response for delete user
 def test_delete_user_401():
-    response = client.delete(f'/users/delete')
+    response = client.delete('/users/delete')
     assert response.status_code == 401
     assert response.json() == {'detail': 'Not authenticated'}
