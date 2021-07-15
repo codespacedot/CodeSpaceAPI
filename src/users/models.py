@@ -42,3 +42,8 @@ class Token(BaseModel):
     """JWT Token."""
     access_token: str
     token_type: str
+
+
+class ChangePassword(BaseModel):
+    """New Password."""
+    new_password: str

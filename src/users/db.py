@@ -83,7 +83,7 @@ def delete_user(key: str) -> bool:
 
     Arguments:
     ---------
-        email: User's email id.
+        key: User's database key.
 
     Returns:
     ---------
@@ -93,4 +93,22 @@ def delete_user(key: str) -> bool:
     if not user:
         return False
     USERS.delete(user['key'])
+    return True
+
+
+def update_password(key: str, new_password: str) -> bool:
+    """Delete user with matching email id.
+
+    Arguments:
+    ---------
+        email: User's email id.
+
+    Returns:
+    ---------
+        True if password gets updated else False.
+    """
+    try:
+        USERS.update(updates={'password': new_password}, key=key)
+    except Exception:  # Type of exception is not provided by deta.
+        return False
     return True

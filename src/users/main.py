@@ -89,3 +89,29 @@ def _delete_user(key: str) -> Dict:
 def delete_user(user: Dict) -> Dict:
     """Delete user."""
     return _delete_user(user['key'])
+
+
+def _update_password(key: str, new_password: str) -> Dict:
+    """Update password.
+
+    Arguments:
+    ---------
+        key: User's database key.
+        new_password: New password.
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 500 if database error.
+    """
+    if not db.update_password(key=key, new_password=new_password):
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+    return {'detail': 'Password updated.'}
+
+
+def change_password(user: Dict, password: models.ChangePassword):
+    """Change password of logged in user"""
+    return _update_password(key=user['key'], new_password=password.new_password)
