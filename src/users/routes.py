@@ -41,3 +41,14 @@ async def login_user(user_data: OAuth2PasswordRequestForm = Depends()):
     ----
     """
     return main.login_user(user_data=user_data)
+
+
+@user_router.put('/password/change', status_code=status.HTTP_200_OK)
+async def change_password(password: models.ChangePassword, user: Dict = Depends(oauth2.get_current_user)):
+    """Change password.
+
+    Note:
+    ---------
+    Password encryption must be performed at front end.
+    """
+    return main.change_password(user=user, password=password)

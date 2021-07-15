@@ -9,15 +9,15 @@
 
 <body>
 <div id="greeting" style="font-family:'Ubuntu',serif;">
-    <p style="font-size:20px;">Hello {{ body.name }},</p>
+    <p style="font-size:20px; color: black">Hello {{ body.name }},</p>
 </div>
 
-<div id="message" style="font-family:'Ubuntu',serif; line-height: 0.5;">
+<div id="message" style="font-family:'Ubuntu',serif; line-height: 0.5; color: black">
     {% block message %}
     {% endblock %}
 </div>
 
-<div id="signature" style="font-family:'Ubuntu',serif; margin-top: 40px; line-height: 0.5;">
+<div id="signature" style="font-family:'Ubuntu',serif; margin-top: 40px; line-height: 0.5; color: black">
     <p>_</p>
     <p>Regards,</p>
     <p style="margin-top: 28px;">CodeSpace Team</p>
