@@ -15,6 +15,7 @@ class Subject(BaseModel):
     """Used inside semester."""
     key: str
     name: str
+    abbreviation: str
 
 
 class Lab(BaseModel):
