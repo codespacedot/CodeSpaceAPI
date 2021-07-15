@@ -40,8 +40,7 @@ def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
     if db.create_user(**user.dict()):
         email.send_welcome_email(background_tasks=task, email_to=user.email, name=user.first_name)
         return {'detail': 'User created.'}
-    else:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
 
 
 def login_user(user_data: OAuth2PasswordRequestForm) -> Dict:

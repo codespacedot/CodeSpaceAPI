@@ -65,6 +65,14 @@ def test_login_user_400():
     assert response.json() == {'detail': {'ERROR': 'Invalid credentials.'}}
 
 
+# Test for successful response for change password
+def test_change_password_200():
+    response = client.put('/users/password/change', json={'new_password': 'pass1234'},
+                          headers={'Authorization': f'Bearer {access_token}'})
+    # assert response.status_code == 200
+    assert response.json() == {'detail': 'Password updated.'}
+
+
 # Test for successful response for delete user
 def test_delete_user_200():
     response = client.delete('/users/delete', headers={
