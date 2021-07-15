@@ -7,12 +7,12 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class UserBase(BaseModel):
     """Base User model."""
-    email: str
+    email: EmailStr
 
 
 class UserCreate(UserBase):
