@@ -16,13 +16,14 @@ DETA_ACCESS_KEY = config('DETA_ACCESS_KEY')
 BASE_SUBJECT = 'subject'
 BASE_LAB = 'lab'
 BASE_USER = 'user'
+BASE_PASSWORD_RESET = 'pReset'
 
 # JWT
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
 JWT_EXPIRE_MINUTES = 30
 
-
+# Mail
 MAIL_ID = config('MAIL_ID')
 MAIL_PASSWORD = config('MAIL_PASSWORD')
 MAIL_PORT = 587
@@ -38,3 +39,7 @@ class TestUser(object):
     L_NAME = 'FastAPI'
     DOB = '15041984'
     PASSWORD = 'password'
+
+
+# Verification
+VERIFICATION_CODE_LENGTH = 6

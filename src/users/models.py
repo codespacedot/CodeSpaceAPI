@@ -47,3 +47,19 @@ class Token(BaseModel):
 class ChangePassword(BaseModel):
     """New Password."""
     new_password: str
+
+
+class ForgotPassword(BaseModel):
+    """Used to reset password.
+
+    Note:
+    ---------
+    DOB encryption must be performed at front end.
+    """
+    email: EmailStr
+    dob: str
+
+
+class ResetPassword(ChangePassword):
+    """Password reset request."""
+    verification_code: str

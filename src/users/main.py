@@ -7,13 +7,16 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
+import random
+import string
+
 from typing import Dict
 from fastapi import BackgroundTasks, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
 from . import db, models, oauth2
-from .. import email
+from .. import email, settings
 
 
 def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
@@ -111,6 +114,73 @@ def _update_password(key: str, new_password: str) -> Dict:
     return {'detail': 'Password updated.'}
 
 
-def change_password(user: Dict, password: models.ChangePassword):
+def change_password(user: Dict, password: models.ChangePassword) -> Dict:
     """Change password of logged in user"""
     return _update_password(key=user['key'], new_password=password.new_password)
+
+
+def _generate_verification_code() -> str:
+    """Generate verification code.
+
+    Returns:
+    ---------
+        Alphanumeric code of length 'src.settings.VERIFICATION_CODE_LENGTH'
+    """
+    data = string.ascii_uppercase + string.digits
+    verification_code = ''.join([random.choice(data) for _ in range(settings.VERIFICATION_CODE_LENGTH)])
+
+    return verification_code
+
+
+def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
+    """Email verification code for password reset.
+    If user details are matching, an email code is sent to registered email id.
+
+    Arguments:
+    ---------
+        data: User details, [email, dob]
+        task: Background tasks for sending email.
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 400 if invalid details.
+        HTTPException 500 if database error.
+    """
+    user = db.get_user_by_email(email=data.email)
+    if not user or user['dob'] != data.dob:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid details.'})
+
+    verification_code = _generate_verification_code()
+
+    if db.add_password_reset_request(key=verification_code, user_key=user['key']):
+        email.send_password_verification_email(background_tasks=task, email_to=user['email'],
+                                               name=user['first_name'], code=verification_code)
+        return {'detail': 'Verification code sent.'}
+
+    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+
+
+def reset_password(data: models.ResetPassword) -> Dict:
+    """Rest password.
+    Update password if verification code is matching.
+
+    Arguments:
+    ---------
+        data: [new password, verification code]
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 400 if invalid verification code.
+    """
+    request = db.verify_password_reset_request(key=data.verification_code)
+    if not request:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': "Request doesn't exists."})
+    return _update_password(key=request['user_key'], new_password=data.new_password)

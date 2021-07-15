@@ -15,6 +15,7 @@ from .. import settings
 
 deta = Deta(settings.DETA_ACCESS_KEY)
 USERS = deta.Base(settings.BASE_USER)  # Base, similar to collection in MongoDB
+PASSWORD_RESET = deta.Base(settings.BASE_PASSWORD_RESET)
 
 
 def create_user(first_name: str, last_name: str, email: str, dob: str, password: str) -> bool:
@@ -112,3 +113,44 @@ def update_password(key: str, new_password: str) -> bool:
     except Exception:  # Type of exception is not provided by deta.
         return False
     return True
+
+
+def add_password_reset_request(key: str, user_key: str) -> bool:
+    """Add password reset request.
+
+    Arguments:
+    ---------
+        key: Request database key.
+        user_key: User's database key.
+
+    Returns:
+    ---------
+        True if request gets created else False.
+    """
+    new_request = {
+        'key': key,
+        'user_key': user_key
+    }
+    try:
+        PASSWORD_RESET.put(new_request)
+    except Exception:  # Type of exception is not provided by deta.
+        return False
+    return True
+
+
+def verify_password_reset_request(key: str) -> Union[Dict, None]:
+    """Fetch request with matching key.
+    Remove the request from database.
+
+    Arguments:
+    ---------
+        key: Request database key.
+
+    Returns:
+    ---------
+        Request dictionary if exists else None.
+    """
+    request = PASSWORD_RESET.get(key=key)
+    if request:
+        PASSWORD_RESET.delete(key=key)
+    return request

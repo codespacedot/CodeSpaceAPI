@@ -42,10 +42,34 @@ def send_welcome_email(background_tasks: BackgroundTasks, email_to: str, name: s
         None
     """
     message = MessageSchema(
-        subject='Welcome to CodeSpace',
+        subject='[CodeSpace] Welcome to CodeSpace',
         recipients=[email_to],
         body={'name': name},
         subtype='html',
     )
     fast_mail = FastMail(conf)
     background_tasks.add_task(fast_mail.send_message, message, template_name='welcome.html')
+
+
+def send_password_verification_email(background_tasks: BackgroundTasks, email_to: str, name: str, code: str) -> None:
+    """Send email with verification code in background.
+
+    Arguments:
+    ---------
+        background_tasks: Background tasks for sending email.
+        mail_to: Recipient's email id.
+        name: Recipient's first name.
+        code: Alphanumeric verification code.
+
+    Returns:
+    ---------
+        None
+    """
+    message = MessageSchema(
+        subject='[CodeSpace] Verification Code',
+        recipients=[email_to],
+        body={'name': name, 'code': code},
+        subtype='html',
+    )
+    fast_mail = FastMail(conf)
+    background_tasks.add_task(fast_mail.send_message, message, template_name='forgot_password.html')
