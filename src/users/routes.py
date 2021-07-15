@@ -52,3 +52,20 @@ async def change_password(password: models.ChangePassword, user: Dict = Depends(
     Password encryption must be performed at front end.
     """
     return main.change_password(user=user, password=password)
+
+
+@user_router.post('/password/forgot', status_code=status.HTTP_200_OK)
+async def forgot_password(request: models.ForgotPassword, background_task: BackgroundTasks):
+    """Email password reset verification code to user.
+
+    Note:
+    ---------
+    DOB encryption must be performed at front end.
+    """
+    return main.forgot_password(data=request, task=background_task)
+
+
+@user_router.put('/password/reset', status_code=status.HTTP_200_OK)
+async def reset_password(request: models.ResetPassword):
+    """Reset password if user has verification code."""
+    return main.reset_password(data=request)
