@@ -12,7 +12,7 @@ from fastapi import APIRouter, status
 # Own Imports
 from . import main, models
 
-academic_router = APIRouter(prefix='/academics', tags=['Academics'])
+academic_router = APIRouter(prefix='/api/academics', tags=['Academics'])
 
 
 @academic_router.get('/year/{year}', response_model=models.Year, status_code=status.HTTP_200_OK)
