@@ -18,7 +18,7 @@ from jose import JWTError, jwt
 from .. import settings
 from . import db
 
-OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl='users/login')  # login url
+OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl='api/users/login')  # login url
 
 
 def create_access_token(data: dict) -> str:
