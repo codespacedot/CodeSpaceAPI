@@ -80,10 +80,11 @@ class ProfileGet(BaseModel):
 
 class ProfileUpdate(BaseModel):
     """Used to update user profile."""
-    first_name: Optional[str]
-    last_name: Optional[str]
-    bio: Optional[str]
-    batch: Optional[str]
-    linkedin: Optional[HttpUrl]
-    github: Optional[HttpUrl]
-    skills: Optional[List[str]]
+    first_name: Optional[str] = ''
+    last_name: Optional[str] = ''
+    email: Optional[EmailStr] = ''
+    bio: Optional[str] = ''
+    batch: Optional[str] = ''
+    linkedin: Optional[HttpUrl] = ''
+    github: Optional[HttpUrl] = ''
+    skills: Optional[List[str]] = []

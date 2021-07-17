@@ -44,9 +44,9 @@ async def my_profile(user: Dict = Depends(oauth2.get_current_user)):
 
 
 @user_router.put('/update', status_code=status.HTTP_200_OK)
-async def update_profile(user: Dict = Depends(oauth2.get_current_user)):
+async def update_profile(updates: models.ProfileUpdate, user: Dict = Depends(oauth2.get_current_user)):
     """Update profile."""
-    pass
+    return main.update_profile(user=user, updates=updates)
 
 
 @user_router.delete('/delete', status_code=status.HTTP_200_OK)

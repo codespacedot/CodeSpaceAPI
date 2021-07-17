@@ -114,12 +114,49 @@ def get_profile(key: str) -> Dict:
 
 
 def get_current_profile(user: Dict) -> Dict:
-    """Get logged in user's profile."""
+    """Get logged in user's profile.
+
+    Arguments:
+    ---------
+        user: User dictionary.
+
+    Returns:
+    ---------
+        User profile dictionary.
+    """
     return get_profile(user['key'])
 
 
 def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
-    pass
+    """Update user profile.
+
+    Arguments:
+    ---------
+        user: User dictionary.
+        updates: Field to update.
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 500 if database error.
+    """
+    # Remove empty fields, so that those won't get updated
+    updates = updates.dict()
+    items_to_remove = []
+    for item in updates:
+        if not updates[item]:
+            items_to_remove.append(item)
+
+    for item in items_to_remove:
+        updates.pop(item)
+    # ----------------------------------------------------
+
+    if not db.update_profile(key=user['key'], **updates):
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+    return {'detail': 'Profile updated.'}
 
 
 # ========== Password ==================================================================================================
@@ -145,7 +182,21 @@ def _update_password(key: str, new_password: str) -> Dict:
 
 
 def change_password(user: Dict, password: models.ChangePassword) -> Dict:
-    """Change password of logged in user"""
+    """Change password of logged in user.
+
+    Arguments:
+    ---------
+        user: User dictionary.
+        password: New password.
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 500 if database error.
+    """
     return _update_password(key=user['key'], new_password=password.new_password)
 
 

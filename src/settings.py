@@ -42,8 +42,8 @@ class TestUser(object):
     PASSWORD = 'password'
     BATCH = '2020'
     BIO = 'Default bio.'
-    LINKEDIN = 'Link to linkedin profile'
-    GITHUB = 'Link to GitHub profile'
+    LINKEDIN = 'https://linkedin.com/in/pytest'
+    GITHUB = 'https://github.com/pytest'
     SKILLS = ['python', 'fastapi']
 
 
