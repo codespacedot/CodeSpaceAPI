@@ -10,6 +10,9 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 from pydantic import BaseModel, EmailStr, HttpUrl
 from typing import List, Optional
 
+# Own imports
+from .. import settings
+
 
 class UserBase(BaseModel):
     """Base User model."""
@@ -82,9 +85,9 @@ class ProfileUpdate(BaseModel):
     """Used to update user profile."""
     first_name: Optional[str] = ''
     last_name: Optional[str] = ''
-    email: Optional[EmailStr] = ''
+    email: Optional[EmailStr] = settings.DEFAULT_EMAIL
     bio: Optional[str] = ''
     batch: Optional[str] = ''
-    linkedin: Optional[HttpUrl] = ''
-    github: Optional[HttpUrl] = ''
+    linkedin: Optional[HttpUrl] = settings.DEFAULT_LINKEDIN
+    github: Optional[HttpUrl] = settings.DEFAULT_GITHUB
     skills: Optional[List[str]] = []

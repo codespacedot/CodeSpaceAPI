@@ -49,3 +49,8 @@ class TestUser(object):
 
 # Verification
 VERIFICATION_CODE_LENGTH = 6
+
+# Defaults for models
+DEFAULT_EMAIL = 'user@example.com'
+DEFAULT_LINKEDIN = 'https://linkedin.com/in/handle'
+DEFAULT_GITHUB = 'https://github.com/handle'

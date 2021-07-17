@@ -13,7 +13,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
 from . import db, models, oauth2
-from .. import email
+from .. import email, settings
 from ..utils import string_utils
 
 
@@ -143,11 +143,12 @@ def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
     ---------
         HTTPException 500 if database error.
     """
-    # Remove empty fields, so that those won't get updated
+    # Remove empty and default fields, so that those won't get updated
     updates = updates.dict()
     items_to_remove = []
     for item in updates:
-        if not updates[item]:
+        if not updates[item] or updates[item] in {settings.DEFAULT_EMAIL, settings.DEFAULT_LINKEDIN,
+                                                  settings.DEFAULT_GITHUB}:
             items_to_remove.append(item)
 
     for item in items_to_remove:
