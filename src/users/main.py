@@ -147,8 +147,9 @@ def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
     updates = updates.dict()
     items_to_remove = []
     for item in updates:
-        if not updates[item] or updates[item] in {settings.DEFAULT_EMAIL, settings.DEFAULT_LINKEDIN,
-                                                  settings.DEFAULT_GITHUB}:
+        if not updates[item] or (
+                item != 'skills' and updates[item] in {settings.DEFAULT_EMAIL, settings.DEFAULT_LINKEDIN,
+                                                       settings.DEFAULT_GITHUB}):
             items_to_remove.append(item)
 
     for item in items_to_remove:
