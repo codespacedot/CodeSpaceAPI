@@ -65,6 +65,24 @@ def test_login_user_400():
     assert response.json() == {'detail': {'ERROR': 'Invalid credentials.'}}
 
 
+# Test for successful response for get logged in user profile
+def test_my_profile_200():
+    response = client.get('/api/users/me', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+    assert response.json() == {
+        'name': TestUser.F_NAME + ' ' + TestUser.L_NAME,
+        'email': TestUser.EMAIL,
+        'bio': '',
+        'batch': '',
+        'linkedin': '',
+        'github': '',
+        'skills': [],
+        'profile_pic': ''
+    }
+
+
 # Test for successful response for change password
 def test_change_password_200():
     response = client.put('/api/users/password/change', json={'new_password': 'pass1234'},

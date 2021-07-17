@@ -17,6 +17,7 @@ from .. import email
 from ..utils import string_utils
 
 
+# ========== User ======================================================================================================
 def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
     """Create user.
 
@@ -66,12 +67,12 @@ def login_user(user_data: OAuth2PasswordRequestForm) -> Dict:
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-def _delete_user(key: str) -> Dict:
+def delete_user(user: Dict) -> Dict:
     """Delete user.
 
     Arguments:
     ---------
-        key: User's database key.
+        user: User dictionary.
 
     Returns:
     ---------
@@ -81,16 +82,47 @@ def _delete_user(key: str) -> Dict:
     ---------
         HTTPException 400 if user doesn't exists.
     """
+    key = user['key']
     if not db.delete_user(key=key):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
     return {'detail': 'User deleted.'}
 
 
-def delete_user(user: Dict) -> Dict:
-    """Delete user."""
-    return _delete_user(user['key'])
+# ========== User Profile ==============================================================================================
+def get_profile(key: str) -> Dict:
+    """Get User profile.
+
+    Arguments:
+    ---------
+        key: User's database key.
+
+    Returns:
+    ---------
+        User profile dictionary.
+
+    Raises:
+    ---------
+        HTTPException 404 if user doesn't exists.
+    """
+    profile = db.get_profile(key=key)
+    if not profile:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
+    name = ''
+    name += profile.pop('first_name') + ' ' + profile.pop('last_name')
+    profile['name'] = name
+    return profile
 
 
+def get_current_profile(user: Dict) -> Dict:
+    """Get logged in user's profile."""
+    return get_profile(user['key'])
+
+
+def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
+    pass
+
+
+# ========== Password ==================================================================================================
 def _update_password(key: str, new_password: str) -> Dict:
     """Update password.
 
