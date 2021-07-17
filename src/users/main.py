@@ -7,16 +7,14 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-import random
-import string
-
 from typing import Dict
 from fastapi import BackgroundTasks, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
 from . import db, models, oauth2
-from .. import email, settings
+from .. import email
+from ..utils import string_utils
 
 
 def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
@@ -119,19 +117,6 @@ def change_password(user: Dict, password: models.ChangePassword) -> Dict:
     return _update_password(key=user['key'], new_password=password.new_password)
 
 
-def _generate_verification_code() -> str:
-    """Generate verification code.
-
-    Returns:
-    ---------
-        Alphanumeric code of length 'src.settings.VERIFICATION_CODE_LENGTH'
-    """
-    data = string.ascii_uppercase + string.digits
-    verification_code = ''.join([random.choice(data) for _ in range(settings.VERIFICATION_CODE_LENGTH)])
-
-    return verification_code
-
-
 def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
     """Email verification code for password reset.
     If user details are matching, an email code is sent to registered email id.
@@ -154,7 +139,7 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
     if not user or user['dob'] != data.dob:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid details.'})
 
-    verification_code = _generate_verification_code()
+    verification_code = string_utils.verification_code()
 
     if db.add_password_reset_request(key=verification_code, user_key=user['key']):
         email.send_password_verification_email(background_tasks=task, email_to=user['email'],
