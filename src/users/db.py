@@ -7,7 +7,7 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from typing import Dict, Union
+from typing import Dict, Optional
 from deta import Deta
 
 # Own Imports
@@ -48,7 +48,7 @@ def create_user(first_name: str, last_name: str, email: str, dob: str, password:
     return True
 
 
-def get_user_by_email(email: str) -> Union[Dict, None]:
+def get_user_by_email(email: str) -> Optional[Dict]:
     """Fetch user with matching email id.
 
     Arguments:
@@ -65,7 +65,7 @@ def get_user_by_email(email: str) -> Union[Dict, None]:
     return None
 
 
-def get_user_by_key(key: str) -> Union[Dict, None]:
+def get_user_by_key(key: str) -> Optional[Dict]:
     """Fetch user with matching email id.
 
     Arguments:
@@ -138,7 +138,7 @@ def add_password_reset_request(key: str, user_key: str) -> bool:
     return True
 
 
-def verify_password_reset_request(key: str) -> Union[Dict, None]:
+def verify_password_reset_request(key: str) -> Optional[Dict]:
     """Fetch request with matching key.
     Remove the request from database.
 

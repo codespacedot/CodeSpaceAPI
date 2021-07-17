@@ -32,7 +32,7 @@ def get_subject(code: str) -> Dict:
     return SUBJECTS.get(key=code)
 
 
-def get_subjects(year: Optional[int] = -1) -> Union[List[Dict], None]:
+def get_subjects(year: Optional[int] = -1) -> Optional[List[Dict]]:
     """Fetch list of subjects.
 
     Fetch subjects for specified year if year is -1, fetch all.
@@ -52,7 +52,7 @@ def get_subjects(year: Optional[int] = -1) -> Union[List[Dict], None]:
     return next(SUBJECTS.fetch(query={'year': year}))
 
 
-def get_labs(year: Optional[int] = -1) -> Union[List[Dict], None]:
+def get_labs(year: Optional[int] = -1) -> Optional[List[Dict]]:
     """Fetch list of labs.
 
     Fetch labs for specified year if year is -1, fetch all.
