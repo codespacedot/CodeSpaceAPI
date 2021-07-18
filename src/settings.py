@@ -10,6 +10,12 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 # Library Imports
 from decouple import config
 
+# Allowed Origins
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
 # Deta
 DETA_ACCESS_KEY = config('DETA_ACCESS_KEY')
 
