@@ -18,7 +18,6 @@ from .settings import ALLOWED_ORIGINS
 # FastAPI app
 app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.2.1', docs_url='/')
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
