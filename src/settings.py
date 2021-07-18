@@ -10,12 +10,19 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 # Library Imports
 from decouple import config
 
+# Allowed Origins
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "localhost:3000"
+]
+
 # Deta
 DETA_ACCESS_KEY = config('DETA_ACCESS_KEY')
 
 BASE_SUBJECT = 'subject'
 BASE_LAB = 'lab'
 BASE_USER = 'user'
+BASE_PROFILE = 'profile'
 BASE_PASSWORD_RESET = 'pReset'
 
 # JWT
@@ -39,7 +46,17 @@ class TestUser(object):
     L_NAME = 'FastAPI'
     DOB = '15041984'
     PASSWORD = 'password'
+    BATCH = '2020'
+    BIO = 'Default bio.'
+    LINKEDIN = 'https://linkedin.com/in/pytest'
+    GITHUB = 'https://github.com/pytest'
+    SKILLS = ['python', 'fastapi']
 
 
 # Verification
 VERIFICATION_CODE_LENGTH = 6
+
+# Defaults for models
+DEFAULT_EMAIL = 'user@example.com'
+DEFAULT_LINKEDIN = 'https://linkedin.com/in/handle'
+DEFAULT_GITHUB = 'https://github.com/handle'

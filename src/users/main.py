@@ -7,9 +7,6 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-import random
-import string
-
 from typing import Dict
 from fastapi import BackgroundTasks, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -17,8 +14,10 @@ from fastapi.security import OAuth2PasswordRequestForm
 # Own Imports
 from . import db, models, oauth2
 from .. import email, settings
+from ..utils import string_utils
 
 
+# ========== User ======================================================================================================
 def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
     """Create user.
 
@@ -68,12 +67,12 @@ def login_user(user_data: OAuth2PasswordRequestForm) -> Dict:
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-def _delete_user(key: str) -> Dict:
+def delete_user(user: Dict) -> Dict:
     """Delete user.
 
     Arguments:
     ---------
-        key: User's database key.
+        user: User dictionary.
 
     Returns:
     ---------
@@ -83,16 +82,86 @@ def _delete_user(key: str) -> Dict:
     ---------
         HTTPException 400 if user doesn't exists.
     """
+    key = user['key']
     if not db.delete_user(key=key):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
     return {'detail': 'User deleted.'}
 
 
-def delete_user(user: Dict) -> Dict:
-    """Delete user."""
-    return _delete_user(user['key'])
+# ========== User Profile ==============================================================================================
+def get_profile(key: str) -> Dict:
+    """Get User profile.
+
+    Arguments:
+    ---------
+        key: User's database key.
+
+    Returns:
+    ---------
+        User profile dictionary.
+
+    Raises:
+    ---------
+        HTTPException 404 if user doesn't exists.
+    """
+    profile = db.get_profile(key=key)
+    if not profile:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
+    name = ''
+    name += profile.pop('first_name') + ' ' + profile.pop('last_name')
+    profile['name'] = name
+    return profile
 
 
+def get_current_profile(user: Dict) -> Dict:
+    """Get logged in user's profile.
+
+    Arguments:
+    ---------
+        user: User dictionary.
+
+    Returns:
+    ---------
+        User profile dictionary.
+    """
+    return get_profile(user['key'])
+
+
+def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
+    """Update user profile.
+
+    Arguments:
+    ---------
+        user: User dictionary.
+        updates: Field to update.
+
+    Returns:
+    ---------
+        Success message dictionary.
+
+    Raises:
+    ---------
+        HTTPException 500 if database error.
+    """
+    # Remove empty and default fields, so that those won't get updated
+    updates = updates.dict()
+    items_to_remove = []
+    for item in updates:
+        if not updates[item] or (
+                item != 'skills' and updates[item] in {settings.DEFAULT_EMAIL, settings.DEFAULT_LINKEDIN,
+                                                       settings.DEFAULT_GITHUB}):
+            items_to_remove.append(item)
+
+    for item in items_to_remove:
+        updates.pop(item)
+    # ----------------------------------------------------
+
+    if not db.update_profile(key=user['key'], **updates):
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+    return {'detail': 'Profile updated.'}
+
+
+# ========== Password ==================================================================================================
 def _update_password(key: str, new_password: str) -> Dict:
     """Update password.
 
@@ -115,21 +184,22 @@ def _update_password(key: str, new_password: str) -> Dict:
 
 
 def change_password(user: Dict, password: models.ChangePassword) -> Dict:
-    """Change password of logged in user"""
-    return _update_password(key=user['key'], new_password=password.new_password)
+    """Change password of logged in user.
 
-
-def _generate_verification_code() -> str:
-    """Generate verification code.
+    Arguments:
+    ---------
+        user: User dictionary.
+        password: New password.
 
     Returns:
     ---------
-        Alphanumeric code of length 'src.settings.VERIFICATION_CODE_LENGTH'
-    """
-    data = string.ascii_uppercase + string.digits
-    verification_code = ''.join([random.choice(data) for _ in range(settings.VERIFICATION_CODE_LENGTH)])
+        Success message dictionary.
 
-    return verification_code
+    Raises:
+    ---------
+        HTTPException 500 if database error.
+    """
+    return _update_password(key=user['key'], new_password=password.new_password)
 
 
 def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
@@ -154,7 +224,7 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
     if not user or user['dob'] != data.dob:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid details.'})
 
-    verification_code = _generate_verification_code()
+    verification_code = string_utils.verification_code()
 
     if db.add_password_reset_request(key=verification_code, user_key=user['key']):
         email.send_password_verification_email(background_tasks=task, email_to=user['email'],

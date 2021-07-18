@@ -7,7 +7,11 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, HttpUrl
+from typing import List, Optional
+
+# Own imports
+from .. import settings
 
 
 class UserBase(BaseModel):
@@ -63,3 +67,27 @@ class ForgotPassword(BaseModel):
 class ResetPassword(ChangePassword):
     """Password reset request."""
     verification_code: str
+
+
+class ProfileGet(BaseModel):
+    """Used to get user profile."""
+    name: str
+    email: EmailStr
+    bio: str
+    batch: str
+    linkedin: str
+    github: str
+    skills: List[str]
+    profile_pic: str
+
+
+class ProfileUpdate(BaseModel):
+    """Used to update user profile."""
+    first_name: Optional[str] = ''
+    last_name: Optional[str] = ''
+    email: Optional[EmailStr] = settings.DEFAULT_EMAIL
+    bio: Optional[str] = ''
+    batch: Optional[str] = ''
+    linkedin: Optional[HttpUrl] = settings.DEFAULT_LINKEDIN
+    github: Optional[HttpUrl] = settings.DEFAULT_GITHUB
+    skills: Optional[List[str]] = []

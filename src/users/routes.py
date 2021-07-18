@@ -27,12 +27,6 @@ async def create_user(user: models.UserCreate, background_task: BackgroundTasks)
     return main.create_user(user=user, task=background_task)
 
 
-@user_router.delete('/delete', status_code=status.HTTP_200_OK)
-async def delete_user(user: Dict = Depends(oauth2.get_current_user)):
-    """Delete user."""
-    return main.delete_user(user=user)
-
-
 @user_router.post('/login', response_model=models.Token, status_code=status.HTTP_200_OK)
 async def login_user(user_data: OAuth2PasswordRequestForm = Depends()):
     """Log in user.
@@ -41,6 +35,24 @@ async def login_user(user_data: OAuth2PasswordRequestForm = Depends()):
     ----
     """
     return main.login_user(user_data=user_data)
+
+
+@user_router.get('/me', response_model=models.ProfileGet, status_code=status.HTTP_200_OK)
+async def my_profile(user: Dict = Depends(oauth2.get_current_user)):
+    """Get profile of logged in user."""
+    return main.get_current_profile(user=user)
+
+
+@user_router.put('/update', status_code=status.HTTP_200_OK)
+async def update_profile(updates: models.ProfileUpdate, user: Dict = Depends(oauth2.get_current_user)):
+    """Update profile."""
+    return main.update_profile(user=user, updates=updates)
+
+
+@user_router.delete('/delete', status_code=status.HTTP_200_OK)
+async def delete_user(user: Dict = Depends(oauth2.get_current_user)):
+    """Delete user."""
+    return main.delete_user(user=user)
 
 
 @user_router.put('/password/change', status_code=status.HTTP_200_OK)

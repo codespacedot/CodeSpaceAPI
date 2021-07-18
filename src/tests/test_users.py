@@ -65,11 +65,74 @@ def test_login_user_400():
     assert response.json() == {'detail': {'ERROR': 'Invalid credentials.'}}
 
 
+# Test for successful response for get profile of logged in user
+def test_my_profile_200():
+    response = client.get('/api/users/me', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+    assert response.json() == {
+        'name': TestUser.F_NAME + ' ' + TestUser.L_NAME,
+        'email': TestUser.EMAIL,
+        'bio': '',
+        'batch': '',
+        'linkedin': '',
+        'github': '',
+        'skills': [],
+        'profile_pic': ''
+    }
+
+
+# Test for successful response for update profile
+def test_update_profile_200():
+    response = client.put('/api/users/update', headers={'Authorization': f'Bearer {access_token}'},
+                          json={
+                              'bio': TestUser.BIO,
+                              'batch': TestUser.BATCH,
+                              'linkedin': TestUser.LINKEDIN,
+                              'github': TestUser.GITHUB,
+                              'skills': TestUser.SKILLS,
+                          })
+    assert response.status_code == 200
+    assert response.json() == {'detail': 'Profile updated.'}
+
+
+# Test for successful response for get profile after profile update
+def test_my_updated_profile_200():
+    response = client.get('/api/users/me', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+    assert response.json() == {
+        'name': TestUser.F_NAME + ' ' + TestUser.L_NAME,
+        'email': TestUser.EMAIL,
+        'bio': TestUser.BIO,
+        'batch': TestUser.BATCH,
+        'linkedin': TestUser.LINKEDIN,
+        'github': TestUser.GITHUB,
+        'skills': TestUser.SKILLS,
+        'profile_pic': ''
+    }
+
+
+# Test for unsuccessful response for update profile
+def test_update_profile_422():
+    response = client.put('/api/users/update', headers={'Authorization': f'Bearer {access_token}'},
+                          json={
+                              'bio': TestUser.BIO,
+                              'batch': TestUser.BATCH,
+                              'linkedin': 'Linked In link',
+                              'github': TestUser.GITHUB,
+                              'skills': 'python',
+                          })
+    assert response.status_code == 422
+
+
 # Test for successful response for change password
 def test_change_password_200():
     response = client.put('/api/users/password/change', json={'new_password': 'pass1234'},
                           headers={'Authorization': f'Bearer {access_token}'})
-    # assert response.status_code == 200
+    assert response.status_code == 200
     assert response.json() == {'detail': 'Password updated.'}
 
 
