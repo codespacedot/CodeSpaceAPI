@@ -49,10 +49,16 @@ async def update_profile(updates: models.ProfileUpdate, user: Dict = Depends(oau
     return main.update_profile(user=user, updates=updates)
 
 
-@user_router.put('/profile_pic/upload', status_code=status.HTTP_200_OK)
-async def upload_profile_pic(image: UploadFile = File(...), user: Dict = Depends(oauth2.get_current_user)):
-    """Upload profile image."""
+@user_router.put('/profile_pic/update', status_code=status.HTTP_200_OK)
+async def update_profile_pic(image: UploadFile = File(...), user: Dict = Depends(oauth2.get_current_user)):
+    """Upload profile picture."""
     return main.update_profile_pic(user=user, image=image)
+
+
+@user_router.delete('/profile_pic/delete', status_code=status.HTTP_200_OK)
+async def delete_profile_pic(user: Dict = Depends(oauth2.get_current_user)):
+    """Delete profile picture."""
+    return main.delete_profile_pic(user=user)
 
 
 @user_router.delete('/delete', status_code=status.HTTP_200_OK)

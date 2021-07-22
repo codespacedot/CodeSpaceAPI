@@ -8,14 +8,9 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict, List, Optional
-from deta import Deta
 
 # Own Imports
-from .. import settings
-
-deta = Deta(settings.DETA_ACCESS_KEY)
-SUBJECTS = deta.Base(settings.BASE_SUBJECT)  # Base, similar to collection in MongoDB
-LABS = deta.Base(settings.BASE_LAB)
+from src.settings import BASE_SUBJECT, BASE_LAB
 
 
 def get_subject(code: str) -> Dict:
@@ -29,7 +24,7 @@ def get_subject(code: str) -> Dict:
     ---------
         Dictionary if subject with the code is present else None.
     """
-    return SUBJECTS.get(key=code)
+    return BASE_SUBJECT.get(key=code)
 
 
 def get_subjects(year: Optional[int] = -1) -> Optional[List[Dict]]:
@@ -46,10 +41,10 @@ def get_subjects(year: Optional[int] = -1) -> Optional[List[Dict]]:
         List of Dictionaries for each subject.
     """
     if not year:
-        return next(SUBJECTS.fetch())
+        return next(BASE_SUBJECT.fetch())
     if year not in {2, 3, 4}:
         return None
-    return next(SUBJECTS.fetch(query={'year': year}))
+    return next(BASE_SUBJECT.fetch(query={'year': year}))
 
 
 def get_labs(year: Optional[int] = -1) -> Optional[List[Dict]]:
@@ -66,7 +61,7 @@ def get_labs(year: Optional[int] = -1) -> Optional[List[Dict]]:
         List of Dictionaries for each lab.
     """
     if year == -1:
-        return next(LABS.fetch())
+        return next(BASE_LAB.fetch())
     if year not in {2, 3, 4}:
         return None
-    return next(LABS.fetch(query={'year': year}))
+    return next(BASE_LAB.fetch(query={'year': year}))

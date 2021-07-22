@@ -13,10 +13,11 @@ from fastapi.middleware.cors import CORSMiddleware
 # Own Imports
 from src.academics.routes import academic_router
 from src.users.routes import user_router
+from src.file_server.routes import fs_router
 from src.settings import ALLOWED_ORIGINS
 
 # FastAPI app
-app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.2.1', docs_url='/')
+app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.4.1', docs_url='/')
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,3 +30,5 @@ app.add_middleware(
 # Routers
 app.include_router(user_router)  # User API
 app.include_router(academic_router)  # Academic API
+app.include_router(fs_router)  # File server
+

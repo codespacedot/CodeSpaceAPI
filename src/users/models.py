@@ -7,11 +7,8 @@ __date__ = '11/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from pydantic import BaseModel, EmailStr, HttpUrl
+from pydantic import BaseModel, EmailStr
 from typing import List, Optional
-
-# Own imports
-from src import settings
 
 
 class UserBase(BaseModel):
@@ -83,11 +80,11 @@ class ProfileGet(BaseModel):
 
 class ProfileUpdate(BaseModel):
     """Used to update user profile."""
-    first_name: Optional[str] = ''
-    last_name: Optional[str] = ''
-    email: Optional[EmailStr] = settings.DEFAULT_EMAIL
-    bio: Optional[str] = ''
-    batch: Optional[str] = ''
-    linkedin: Optional[HttpUrl] = settings.DEFAULT_LINKEDIN
-    github: Optional[HttpUrl] = settings.DEFAULT_GITHUB
-    skills: Optional[List[str]] = []
+    first_name: Optional[str]
+    last_name: Optional[str]
+    email: Optional[EmailStr]
+    bio: Optional[str]
+    batch: Optional[str]
+    linkedin: Optional[str]
+    github: Optional[str]
+    skills: Optional[List[str]] = ['skill']

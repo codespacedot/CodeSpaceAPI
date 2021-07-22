@@ -74,12 +74,12 @@ def test_my_profile_200():
     assert response.json() == {
         'name': TestUser.F_NAME + ' ' + TestUser.L_NAME,
         'email': TestUser.EMAIL,
-        'bio': '',
-        'batch': '',
-        'linkedin': '',
-        'github': '',
+        'bio': 'NA',
+        'batch': 'NA',
+        'linkedin': 'NA',
+        'github': 'NA',
         'skills': [],
-        'profile_pic': ''
+        'profile_pic': 'NA'
     }
 
 
@@ -111,7 +111,7 @@ def test_my_updated_profile_200():
         'linkedin': TestUser.LINKEDIN,
         'github': TestUser.GITHUB,
         'skills': TestUser.SKILLS,
-        'profile_pic': ''
+        'profile_pic': 'NA'
     }
 
 

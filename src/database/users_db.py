@@ -8,15 +8,9 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict, Optional
-from deta import Deta
 
 # Own Imports
-from .. import settings
-
-deta = Deta(settings.DETA_ACCESS_KEY)
-BASE_USER = deta.Base(settings.BASE_USER)  # Base, similar to collection in MongoDB
-BASE_PASSWORD_RESET = deta.Base(settings.BASE_PASSWORD_RESET)
-BASE_PROFILE = deta.Base(settings.BASE_PROFILE)
+from src.settings import BASE_USER, BASE_PROFILE, BASE_PASSWORD_RESET
 
 
 # ========== User ======================================================================================================
@@ -50,12 +44,12 @@ def create_user(first_name: str, last_name: str, email: str, dob: str, password:
             'first_name': first_name,
             'last_name': last_name,
             'email': email,
-            'bio': '',
-            'batch': '',
-            'linkedin': '',
-            'github': '',
+            'bio': 'NA',
+            'batch': 'NA',
+            'linkedin': 'NA',
+            'github': 'NA',
             'skills': [],
-            'profile_pic': ''
+            'profile_pic': 'NA'
         }
         BASE_PROFILE.put(profile)
         print('User created, Profile Saved')
@@ -151,6 +145,8 @@ def update_profile(key: str, **kwargs) -> bool:
     """
     try:
         BASE_PROFILE.update(updates=kwargs, key=key)
+
+        # Check if basic parameters need to update.
         user_update = {}
         if 'first_name' in kwargs:
             user_update['first_name'] = kwargs['first_name']
