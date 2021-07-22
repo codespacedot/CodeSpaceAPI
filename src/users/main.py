@@ -14,9 +14,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 # Own Imports
 from . import models, oauth2
 from src import email, settings
-from src.utils import string_utils
 from src.database import users_db as db
 from src.file_server import image_drive
+from src.utils import string_utils
 
 
 # ========== User ======================================================================================================
