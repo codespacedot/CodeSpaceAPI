@@ -55,17 +55,17 @@ jobs:
           # add remote
           git remote add heroku https://heroku:$HEROKU_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
           # set config vars
-          heroku config:set DETA_ACCESS_KEY=${{ secrets.DETA_ACCESS_KEY }}
-          heroku config:set HOSTNAME=${{ secrets.HOSTNAME }}
-          heroku config:set ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
-          heroku config:set JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-          heroku config:set JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
-          heroku config:set JWT_EXPIRE_MINUTES=${{ secrets.JWT_EXPIRE_MINUTES }}
-          heroku config:set MAIL_ID=${{ secrets.MAIL_ID }}
-          heroku config:set MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-          heroku config:set MAIL_PORT=${{ secrets.MAIL_PORT }}
-          heroku config:set MAIL_SERVER=${{ secrets.MAIL_SERVER }}
-          heroku config:set VERIFICATION_CODE_LENGTH=${{ secrets.VERIFICATION_CODE_LENGTH }}
-          heroku config:set TEST_EMAIL=${{ secrets.TEST_EMAIL }}
+          heroku config:set DETA_ACCESS_KEY=${{ secrets.DETA_ACCESS_KEY }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set HOSTNAME=${{ secrets.HOSTNAME }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set JWT_EXPIRE_MINUTES=${{ secrets.JWT_EXPIRE_MINUTES }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set MAIL_ID=${{ secrets.MAIL_ID }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set MAIL_PORT=${{ secrets.MAIL_PORT }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set MAIL_SERVER=${{ secrets.MAIL_SERVER }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set VERIFICATION_CODE_LENGTH=${{ secrets.VERIFICATION_CODE_LENGTH }} -a ${{ secrets.HEROKU_APP_NAME }}
+          heroku config:set TEST_EMAIL=${{ secrets.TEST_EMAIL }} -a ${{ secrets.HEROKU_APP_NAME }}
           # push
           git push heroku HEAD:main -f
