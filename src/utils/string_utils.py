@@ -13,7 +13,7 @@ import random
 
 
 # Own Imports
-from .. import settings
+from src import settings
 
 
 def verification_code() -> str:

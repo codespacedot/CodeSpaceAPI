@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 
 # Own Imports
-from . import settings
+from src import settings
 
 # Mail service configurations
 conf = ConnectionConfig(

@@ -15,8 +15,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 # Own Imports
-from .. import settings
-from . import db
+from src import settings
+from src.database import users_db as db
 
 OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl='api/users/login')  # login url
 

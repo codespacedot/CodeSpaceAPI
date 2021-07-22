@@ -8,13 +8,14 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict
-from fastapi import BackgroundTasks, HTTPException, status
+from fastapi import BackgroundTasks, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
-from . import db, models, oauth2
-from .. import email, settings
-from ..utils import string_utils
+from . import models, oauth2
+from src import email, settings
+from src.utils import string_utils
+from src.database import users_db as db
 
 
 # ========== User ======================================================================================================
@@ -159,6 +160,10 @@ def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
     if not db.update_profile(key=user['key'], **updates):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': 'Profile updated.'}
+
+
+def update_profile_pic(user: Dict, image: UploadFile):
+    image = settings.HOSTNAME + '/'
 
 
 # ========== Password ==================================================================================================

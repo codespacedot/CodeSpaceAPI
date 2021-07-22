@@ -8,7 +8,7 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
 from typing import Dict
-from fastapi import APIRouter, BackgroundTasks, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 # Own Imports
@@ -47,6 +47,12 @@ async def my_profile(user: Dict = Depends(oauth2.get_current_user)):
 async def update_profile(updates: models.ProfileUpdate, user: Dict = Depends(oauth2.get_current_user)):
     """Update profile."""
     return main.update_profile(user=user, updates=updates)
+
+
+@user_router.put('/profile_pic/upload', status_code=status.HTTP_200_OK)
+async def upload_profile_pic(image: UploadFile = File(...), user: Dict = Depends(oauth2.get_current_user)):
+    """Upload profile image."""
+    return main.update_profile_pic(user=user, image=image)
 
 
 @user_router.delete('/delete', status_code=status.HTTP_200_OK)

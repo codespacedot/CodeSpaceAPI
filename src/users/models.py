@@ -11,7 +11,7 @@ from pydantic import BaseModel, EmailStr, HttpUrl
 from typing import List, Optional
 
 # Own imports
-from .. import settings
+from src import settings
 
 
 class UserBase(BaseModel):

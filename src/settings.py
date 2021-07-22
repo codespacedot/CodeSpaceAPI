@@ -10,6 +10,9 @@ __email__ = 'cloudmail.vishwajeet@gmail.com'
 # Library Imports
 from decouple import config
 
+# Hostname
+HOSTNAME = 'https://csdot.herokuapp.com/'
+
 # Allowed Origins
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -24,6 +27,9 @@ BASE_LAB = 'lab'
 BASE_USER = 'user'
 BASE_PROFILE = 'profile'
 BASE_PASSWORD_RESET = 'pReset'
+
+DRIVE_IMAGE = 'images'
+DRIVE_DOC = 'documents'
 
 # JWT
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')

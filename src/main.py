@@ -11,9 +11,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Own Imports
-from .academics.routes import academic_router
-from .users.routes import user_router
-from .settings import ALLOWED_ORIGINS
+from src.academics.routes import academic_router
+from src.users.routes import user_router
+from src.settings import ALLOWED_ORIGINS
 
 # FastAPI app
 app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.2.1', docs_url='/')

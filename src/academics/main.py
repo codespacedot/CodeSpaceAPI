@@ -11,7 +11,7 @@ from typing import Dict
 from fastapi import HTTPException, status
 
 # Own Imports
-from . import db
+from src.database import academics_db as db
 
 
 def get_data_for_year(year: int) -> Dict:
