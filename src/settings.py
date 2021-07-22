@@ -46,7 +46,7 @@ JWT_EXPIRE_MINUTES = config('JWT_EXPIRE_MINUTES', cast=int)
 # Mail
 MAIL_ID = config('MAIL_ID')
 MAIL_PASSWORD = config('MAIL_PASSWORD')
-MAIL_PORT = config('MAIL_PORT')
+MAIL_PORT = config('MAIL_PORT', cast=int)
 MAIL_SERVER = config('MAIL_SERVER')
 MAIL_TEMPLATES_PATH = './templates/email'
 
