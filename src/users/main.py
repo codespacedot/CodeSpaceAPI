@@ -181,6 +181,14 @@ def update_profile_pic(user: Dict, image: UploadFile) -> Dict:
     ---------
         HTTPException 500 if drive/database error.
     """
+    # Delete existing image file.
+    db_user = db.get_profile(key=user['key'])
+    if db_user['profile_pic'] != 'NA':
+        image_url = db_user['profile_pic']
+        filename = image_url.split('/')[-1]
+        image_drive.delete_image(filename=filename)
+
+    # Upload new image file.
     filename = image_drive.upload_image(image=image, key=user['key'])
     if not filename:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
