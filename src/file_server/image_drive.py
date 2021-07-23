@@ -1,4 +1,4 @@
-"""Main functionalities of Image drive.
+"""Image drive.
 """
 
 # Author Info
@@ -11,8 +11,9 @@ from fastapi import UploadFile
 from typing import Optional
 
 # Own Imports
-from src.settings import DRIVE_IMAGE
-from src.utils import string_utils
+from .drive import Drive
+
+drive = Drive(type_='image')
 
 
 def upload_image(image: UploadFile, key: str) -> Optional[str]:
@@ -27,16 +28,11 @@ def upload_image(image: UploadFile, key: str) -> Optional[str]:
     ---------
         Name of the file if uploaded else None.
     """
-    filename = image.filename
-    filename = string_utils.file_name(name=filename, key=key)
-    try:
-        return DRIVE_IMAGE.put(name=filename, data=image.file)
-    except Exception:  # Type of exception is not provided by deta.
-        return
+    return drive.upload(file=image, key=key)
 
 
 def download_image(filename: str):
-    """Download image from Deta drive.
+    """Download image from drive.
 
     Arguments:
     ---------
@@ -46,11 +42,11 @@ def download_image(filename: str):
     ---------
         File data of type `DriveStreamingBody` if exists else None.
     """
-    return DRIVE_IMAGE.get(name=filename)
+    return drive.download(filename=filename)
 
 
 def delete_image(filename: str) -> Optional[str]:
-    """Delete image from Deta drive.
+    """Delete image from drive.
 
     Arguments:
     ---------
@@ -60,7 +56,4 @@ def delete_image(filename: str) -> Optional[str]:
     ---------
         Name of the file if deleted else None.
     """
-    try:
-        return DRIVE_IMAGE.delete(name=filename)
-    except Exception:  # Type of exception is not provided by deta.
-        return
+    return drive.delete(filename=filename)

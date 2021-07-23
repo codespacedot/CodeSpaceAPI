@@ -11,11 +11,18 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
 
 # Own Imports
-from . import image_drive
+from . import document_drive, image_drive
 
 fs_router = APIRouter(prefix='/files', tags=['File server'])
 
-# TODO: @fs_router.get('/document/{filename}')
+
+@fs_router.get('/document/{filename}', status_code=status.HTTP_200_OK)
+async def get_document(filename: str):
+    """Download document."""
+    document = document_drive.download_document(filename=filename)
+    if not document:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': 'File not found.'})
+    return StreamingResponse(document.iter_chunks(1024))
 
 
 @fs_router.get('/image/{filename}', status_code=status.HTTP_200_OK)
