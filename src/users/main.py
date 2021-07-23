@@ -184,7 +184,7 @@ def update_profile_pic(user: Dict, image: UploadFile) -> Dict:
     filename = image_drive.upload_image(image=image, key=user['key'])
     if not filename:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
-    image_url = settings.IMAGE_SERVER + filename
+    image_url = settings.IMAGE_SERVER_PATH + filename
     if not db.update_profile(key=user['key'], profile_pic=image_url):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': {'profile_pic': image_url}}

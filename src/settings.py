@@ -35,8 +35,8 @@ BASE_PASSWORD_RESET = _DETA.Base('pReset')
 DRIVE_IMAGE = _DETA.Drive('images')
 DRIVE_DOC = _DETA.Drive('documents')
 
-IMAGE_SERVER = HOSTNAME + '/files/image/'
-DOCUMENT_SERVER = HOSTNAME + '/files/document/'
+IMAGE_SERVER_PATH = HOSTNAME + '/files/image/'
+DOCUMENT_SERVER_PATH = HOSTNAME + '/files/document/'
 
 # JWT
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
