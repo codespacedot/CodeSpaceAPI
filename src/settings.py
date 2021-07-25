@@ -30,6 +30,7 @@ BASE_LAB = _DETA.Base('lab')
 BASE_USER = _DETA.Base('user')
 BASE_PROFILE = _DETA.Base('profile')
 BASE_PASSWORD_RESET = _DETA.Base('pReset')
+BASE_RESOURCE = _DETA.Base('resource')
 
 # Deta Drive
 DRIVE_IMAGE = _DETA.Drive('images')

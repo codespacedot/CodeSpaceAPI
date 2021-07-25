@@ -52,7 +52,6 @@ def create_user(first_name: str, last_name: str, email: str, dob: str, password:
             'profile_pic': 'NA'
         }
         BASE_PROFILE.put(profile)
-        print('User created, Profile Saved')
     except Exception:  # Type of exception is not provided by deta.
         return False
     return True

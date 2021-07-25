@@ -32,6 +32,18 @@ class Semester(BaseModel):
 
 
 class Year(BaseModel):
-    """Year data"""
+    """Year data."""
     ODD_SEMESTER: Semester
     EVEN_SEMESTER: Semester
+
+
+class Resource(BaseModel):
+    """Used Resource category."""
+    title: str
+    url: str
+
+
+class Resources(BaseModel):
+    """Resources of a subject."""
+    LIBRARY: List[Resource]
+    EXAM: List[Resource]
