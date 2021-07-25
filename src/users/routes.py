@@ -21,8 +21,9 @@ user_router = APIRouter(prefix='/api/users', tags=['Users'])
 async def create_user(user: models.UserCreate, background_task: BackgroundTasks):
     """Create new user and send welcome email.
 
-    DOB and PASSWORD: Should be encrypted at front end.
+    Note:
     ---
+    DOB and PASSWORD: Should be encrypted at front end.
     """
     return main.create_user(user=user, task=background_task)
 
@@ -31,8 +32,9 @@ async def create_user(user: models.UserCreate, background_task: BackgroundTasks)
 async def login_user(user_data: OAuth2PasswordRequestForm = Depends()):
     """Log in user.
 
+    Note:
+    ---
     USERNAME = EMAIL
-    ----
     """
     return main.login_user(user_data=user_data)
 
@@ -72,7 +74,7 @@ async def change_password(password: models.ChangePassword, user: Dict = Depends(
     """Change password.
 
     Note:
-    ---------
+    ---
     Password encryption must be performed at front end.
     """
     return main.change_password(user=user, password=password)
@@ -80,12 +82,7 @@ async def change_password(password: models.ChangePassword, user: Dict = Depends(
 
 @user_router.post('/password/forgot', status_code=status.HTTP_200_OK)
 async def forgot_password(request: models.ForgotPassword, background_task: BackgroundTasks):
-    """Email password reset verification code to user.
-
-    Note:
-    ---------
-    DOB encryption must be performed at front end.
-    """
+    """Email password reset verification code to user."""
     return main.forgot_password(data=request, task=background_task)
 
 

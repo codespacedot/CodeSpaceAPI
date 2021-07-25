@@ -50,15 +50,14 @@ class ChangePassword(BaseModel):
     new_password: str
 
 
-class ForgotPassword(BaseModel):
+class ForgotPassword(UserBase):
     """Used to reset password.
 
     Note:
     ---------
     DOB encryption must be performed at front end.
     """
-    email: EmailStr
-    dob: str
+    pass
 
 
 class ResetPassword(ChangePassword):

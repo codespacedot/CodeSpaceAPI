@@ -17,7 +17,7 @@ from src.file_server.routes import fs_router
 from src.users.routes import user_router
 
 # FastAPI app
-app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='0.4.1', docs_url='/')
+app = FastAPI(title='CodeSpace API', description='API for csdot.ml', version='Beta 1.0', docs_url='/')
 
 app.add_middleware(
     CORSMiddleware,

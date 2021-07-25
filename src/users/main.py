@@ -271,7 +271,7 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
 
     Arguments:
     ---------
-        data: User details, [email, dob]
+        data: User details [email]
         task: Background tasks for sending email.
 
     Returns:
@@ -280,12 +280,12 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
 
     Raises:
     ---------
-        HTTPException 400 if invalid details.
+        HTTPException 404 if user not found.
         HTTPException 500 if database error.
     """
     user = db.get_user_by_email(email=data.email)
-    if not user or user['dob'] != data.dob:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid details.'})
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
 
     verification_code = string_utils.verification_code()
 
