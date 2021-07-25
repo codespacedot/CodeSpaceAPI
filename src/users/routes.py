@@ -23,7 +23,7 @@ async def create_user(user: models.UserCreate, background_task: BackgroundTasks)
 
     Note:
     ---
-    DOB and PASSWORD: Should be encrypted at front end.
+    PASSWORD: Should be encrypted at front end.
     """
     return main.create_user(user=user, task=background_task)
 

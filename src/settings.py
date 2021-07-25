@@ -61,7 +61,6 @@ class TestUser(object):
     EMAIL = config('TEST_EMAIL')
     F_NAME = 'PyTest'
     L_NAME = 'FastAPI'
-    DOB = '15041984'
     PASSWORD = 'password'
     BATCH = '2020'
     BIO = 'bio'

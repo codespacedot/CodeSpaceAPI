@@ -21,11 +21,10 @@ class UserCreate(UserBase):
 
     Note:
     ---------
-    Password and dob encryption must be performed at front end.
+    Password encryption must be performed at front end.
     """
     first_name: str
     last_name: str
-    dob: str
     password: str
 
 
@@ -51,12 +50,7 @@ class ChangePassword(BaseModel):
 
 
 class ForgotPassword(UserBase):
-    """Used to reset password.
-
-    Note:
-    ---------
-    DOB encryption must be performed at front end.
-    """
+    """Used to reset password."""
     pass
 
 

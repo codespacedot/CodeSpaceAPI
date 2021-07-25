@@ -23,7 +23,6 @@ def test_create_user_201():
         'first_name': TestUser.F_NAME,
         'last_name': TestUser.L_NAME,
         'email': TestUser.EMAIL,
-        'dob': TestUser.DOB,
         'password': TestUser.PASSWORD
     })
     assert response.status_code == 201
@@ -36,7 +35,6 @@ def test_create_user_409():
         'first_name': TestUser.F_NAME,
         'last_name': TestUser.L_NAME,
         'email': TestUser.EMAIL,
-        'dob': TestUser.DOB,
         'password': TestUser.PASSWORD
     })
     assert response.status_code == 409

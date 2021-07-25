@@ -14,7 +14,7 @@ from src.settings import BASE_USER, BASE_PROFILE, BASE_PASSWORD_RESET
 
 
 # ========== User ======================================================================================================
-def create_user(first_name: str, last_name: str, email: str, dob: str, password: str) -> bool:
+def create_user(first_name: str, last_name: str, email: str, password: str) -> bool:
     """Create new user.
 
     Arguments:
@@ -22,7 +22,6 @@ def create_user(first_name: str, last_name: str, email: str, dob: str, password:
         first_name: User's first name.
         last_name: User's last name.
         email: User's email id.
-        dob: Date of birth, must be encrypted/hashed at frontend.
         password: Password must be encrypted/hashed at frontend.
 
     Returns:
@@ -34,7 +33,6 @@ def create_user(first_name: str, last_name: str, email: str, dob: str, password:
         'last_name': last_name,
         'email': email,
         'password': password,
-        'dob': dob,
         'is_admin': False,
     }
     try:
