@@ -13,18 +13,21 @@ from typing import Dict, List, Optional
 from src.settings import BASE_SUBJECT, BASE_LAB, BASE_RESOURCE
 
 
-def get_subject(code: str) -> Dict:
-    """Fetch subject with matching code.
+def get_subject_of_sem(semester: int) -> Optional[List[Dict]]:
+    """Fetch subjects with of specified semester.
 
     Arguments:
     ---------
-        code: Subject code.
+        semester: Semester [3...8].
 
     Returns:
     ---------
-        Dictionary if subject with the code is present else None.
+        List of subject dictionaries.
     """
-    return BASE_SUBJECT.get(key=code)
+    try:
+        return next(BASE_SUBJECT.fetch(query={'semester': semester}))
+    except Exception:
+        return None
 
 
 def get_subjects(year: Optional[int] = 0) -> Optional[List[Dict]]:

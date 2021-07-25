@@ -7,7 +7,7 @@ __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
 # Library Imports
-from typing import Dict
+from typing import Dict, List
 from fastapi import HTTPException, UploadFile, status
 
 # Own Imports
@@ -62,6 +62,30 @@ def get_data_for_year(year: int) -> Dict:
             data['EVEN_SEMESTER']['LABS'].append(lab)
 
     return data
+
+
+def get_subjects(semester: int) -> List[Dict]:
+    """Get subjects for specified semester.
+
+    Arguments:
+    ---------
+        semester: Semester [3...8].
+
+    Returns:
+    ---------
+        List of subject dictionaries.
+
+    Raises:
+    ---------
+        HTTPException 400 if semester is invalid.
+        HTTPException 500 if drive/database error.
+    """
+    if semester not in range(3, 9):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid semester.'})
+    subjects = db.get_subject_of_sem(semester=semester)
+    if not subjects:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
+    return subjects
 
 
 def upload_resource(user: Dict, subject: str, title: str, category: str, document: UploadFile) -> Dict:

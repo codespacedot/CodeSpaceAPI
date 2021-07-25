@@ -6,7 +6,7 @@ __author__ = 'Vishwajeet Ghatage'
 __date__ = '10/07/21'
 __email__ = 'cloudmail.vishwajeet@gmail.com'
 
-from typing import Dict
+from typing import Dict, List
 
 # Library Imports
 from fastapi import APIRouter, Depends, File, Form, UploadFile, status
@@ -23,9 +23,19 @@ async def data_for_year(year: int):
     """Get subjects and labs for specified academic year.
 
     YEAR = [2, 3, 4]
-    ----
+    ---
     """
     return main.get_data_for_year(year)
+
+
+@academic_router.get('/subjects', response_model=List[models.Subject], status_code=status.HTTP_200_OK)
+async def get_subjects(semester: int):
+    """Get subjects for specified semester.
+
+    SEMESTER = [3 ... 8]
+    ---
+    """
+    return main.get_subjects(semester=semester)
 
 
 @academic_router.post('/resources/upload', status_code=status.HTTP_200_OK)
