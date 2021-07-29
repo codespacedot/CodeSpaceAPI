@@ -192,21 +192,47 @@ def update_password(key: str, new_password: str) -> bool:
     return True
 
 
-def add_password_reset_request(key: str, user_key: str) -> bool:
-    """Add password reset request.
+def _get_password_reset_request(key: str) -> Optional[Dict]:
+    """Fetch request with matching key.
 
     Arguments:
     ---------
-        key: Request database key.
+        key: Request's key.
+
+    Returns:
+    ---------
+        Request dictionary if exists else None.
+    """
+    return BASE_PASSWORD_RESET.get(key=key)
+
+
+def add_password_reset_request(code: str, user_key: str) -> bool:
+    """Add password reset request.
+
+    If request exists, update the verification code.
+
+    Arguments:
+    ---------
+        code: Verification code.
         user_key: User's database key.
 
     Returns:
     ---------
         True if request gets created else False.
     """
+
+    # If request exists for user
+    if _get_password_reset_request(key=user_key):
+        try:
+            BASE_PASSWORD_RESET.update(updates={'code': code}, key=user_key)
+        except Exception:  # Type of exception is not provided by deta.
+            return False
+        return True
+
+    # New request
     new_request = {
-        'key': key,
-        'user_key': user_key
+        'key': user_key,
+        'code': code
     }
     try:
         BASE_PASSWORD_RESET.put(new_request)
@@ -215,19 +241,20 @@ def add_password_reset_request(key: str, user_key: str) -> bool:
     return True
 
 
-def verify_password_reset_request(key: str) -> Optional[Dict]:
-    """Fetch request with matching key.
+def verify_password_reset_request(code: str) -> Optional[Dict]:
+    """Fetch request with matching code.
     Remove the request from database.
 
     Arguments:
     ---------
-        key: Request database key.
+        code: Verification code.
 
     Returns:
     ---------
         Request dictionary if exists else None.
     """
-    request = BASE_PASSWORD_RESET.get(key=key)
+    request = next(BASE_PASSWORD_RESET.fetch(query={'code': code}))
     if request:
-        BASE_PASSWORD_RESET.delete(key=key)
-    return request
+        request = request[0]
+        BASE_PASSWORD_RESET.delete(key=request['key'])
+        return request

@@ -289,7 +289,7 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
 
     verification_code = string_utils.verification_code()
 
-    if users_db.add_password_reset_request(key=verification_code, user_key=user['key']):
+    if users_db.add_password_reset_request(code=verification_code, user_key=user['key']):
         email.send_password_verification_email(background_tasks=task, email_to=user['email'],
                                                name=user['first_name'], code=verification_code)
         return {'detail': 'Verification code sent.'}
@@ -313,7 +313,7 @@ def reset_password(data: models.ResetPassword) -> Dict:
     ---------
         HTTPException 400 if invalid verification code.
     """
-    request = users_db.verify_password_reset_request(key=data.verification_code)
+    request = users_db.verify_password_reset_request(code=data.verification_code)
     if not request:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': "Request doesn't exists."})
-    return _update_password(key=request['user_key'], new_password=data.new_password)
+    return _update_password(key=request['key'], new_password=data.new_password)
