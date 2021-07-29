@@ -34,6 +34,7 @@ def create_user(first_name: str, last_name: str, email: str, password: str) -> b
         'email': email,
         'password': password,
         'is_admin': False,
+        'is_staff': False
     }
     try:
         response = BASE_USER.put(user)

@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Own Imports
 from src.settings import ALLOWED_ORIGINS
 from src.academics.routes import academic_router
-from src.file_server.routes import fs_router
+from src.drive.routes import drive_router
 from src.users.routes import user_router
 
 # FastAPI app
@@ -30,4 +30,4 @@ app.add_middleware(
 # Routers
 app.include_router(user_router)  # User API
 app.include_router(academic_router)  # Academic API
-app.include_router(fs_router)  # File server
+app.include_router(drive_router)  # Drive API

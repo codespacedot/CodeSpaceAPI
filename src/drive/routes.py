@@ -13,10 +13,10 @@ from fastapi.responses import StreamingResponse
 # Own Imports
 from . import document_drive, image_drive
 
-fs_router = APIRouter(prefix='/files', tags=['File server'])
+drive_router = APIRouter(prefix='/drive', tags=['Drive'])
 
 
-@fs_router.get('/document/{filename}', status_code=status.HTTP_200_OK)
+@drive_router.get('/document/{filename}', status_code=status.HTTP_200_OK)
 async def get_document(filename: str):
     """Download document."""
     document = document_drive.download_document(filename=filename)
@@ -25,7 +25,7 @@ async def get_document(filename: str):
     return StreamingResponse(document.iter_chunks(1024))
 
 
-@fs_router.get('/image/{filename}', status_code=status.HTTP_200_OK)
+@drive_router.get('/image/{filename}', status_code=status.HTTP_200_OK)
 async def get_image(filename: str):
     """Download image."""
     image = image_drive.download_image(filename=filename)

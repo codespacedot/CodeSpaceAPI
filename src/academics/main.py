@@ -12,8 +12,8 @@ from fastapi import HTTPException, UploadFile, status
 
 # Own Imports
 from src import settings
-from src.database import academics_db as db
-from src.file_server import document_drive as drive
+from src.database import academics_db
+from src.drive import document_drive
 
 
 def get_data_for_year(year: int) -> Dict:
@@ -31,8 +31,8 @@ def get_data_for_year(year: int) -> Dict:
     ---------
         HTTPException 400 if year is invalid.
     """
-    subjects = db.get_subjects(year=year)
-    labs = db.get_labs(year=year)
+    subjects = academics_db.get_subjects(year=year)
+    labs = academics_db.get_labs(year=year)
 
     if not subjects or not labs:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -82,7 +82,7 @@ def get_subjects(semester: int) -> List[Dict]:
     """
     if semester not in range(3, 9):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid semester.'})
-    subjects = db.get_subject_of_sem(semester=semester)
+    subjects = academics_db.get_subject_of_sem(semester=semester)
     if not subjects:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return subjects
@@ -109,7 +109,7 @@ def upload_resource(user: Dict, subject: str, title: str, category: str, documen
         HTTPException 400 if category is invalid.
         HTTPException 500 if drive/database error.
     """
-    all_subjects = db.get_subjects()
+    all_subjects = academics_db.get_subjects()
     subject_codes = {sub['key'] for sub in all_subjects}
 
     if subject not in subject_codes:
@@ -118,11 +118,11 @@ def upload_resource(user: Dict, subject: str, title: str, category: str, documen
     if category not in {'library', 'exam'}:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid category.'})
 
-    filename = drive.upload_document(document=document, key=user['key'])
+    filename = document_drive.upload_document(document=document, key=user['key'])
     if not filename:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
-    url = settings.DOCUMENT_SERVER_PATH + filename
-    if not db.create_resource(subject=subject, title=title, category=category, user=user['key'], url=url):
+    url = settings.DOCUMENT_DRIVE_PATH + filename
+    if not academics_db.create_resource(subject=subject, title=title, category=category, user=user['key'], url=url):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': 'Resource uploaded.'}
 
@@ -142,7 +142,7 @@ def get_resources(subject: str):
     ---------
         HTTPException 404 if resources not available.
     """
-    resources = db.get_resources(subject=subject)
+    resources = academics_db.get_resources(subject=subject)
     if not resources:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': 'No resources.'})
 
@@ -157,5 +157,4 @@ def get_resources(subject: str):
         else:
             data['EXAM'].append(resource)
 
-    print(data)
     return data

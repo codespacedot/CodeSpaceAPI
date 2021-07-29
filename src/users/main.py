@@ -14,8 +14,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 # Own Imports
 from . import models, oauth2
 from src import email, settings
-from src.database import users_db as db
-from src.file_server import image_drive
+from src.database import users_db
+from src.drive import image_drive
 from src.utils import string_utils
 
 
@@ -39,9 +39,9 @@ def create_user(user: models.UserCreate, task: BackgroundTasks) -> Dict:
         HTTPException 409 if user exists.
         HTTPException 500 if database error.
     """
-    if db.get_user_by_email(email=user.email):
+    if users_db.get_user_by_email(email=user.email):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail={'ERROR': 'User already exists.'})
-    if db.create_user(**user.dict()):
+    if users_db.create_user(**user.dict()):
         email.send_welcome_email(background_tasks=task, email_to=user.email, name=user.first_name)
         return {'detail': 'User created.'}
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
@@ -62,7 +62,7 @@ def login_user(user_data: OAuth2PasswordRequestForm) -> Dict:
     ---------
         HTTPException 400 if invalid credentials.
     """
-    user = db.get_user_by_email(email=user_data.username)
+    user = users_db.get_user_by_email(email=user_data.username)
     if not user or user['password'] != user_data.password:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid credentials.'})
     access_token = oauth2.create_access_token(data={'sub': user_data.username})
@@ -84,9 +84,9 @@ def delete_user(user: Dict) -> Dict:
     ---------
         HTTPException 400 if user doesn't exists.
     """
-    user_profile = db.get_profile(key=user['key'])
+    user_profile = users_db.get_profile(key=user['key'])
     image_drive.delete_image(filename=user_profile['profile_pic'])
-    if not db.delete_user(key=user['key']):
+    if not users_db.delete_user(key=user['key']):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
     return {'detail': 'User deleted.'}
 
@@ -107,7 +107,7 @@ def get_profile(key: str) -> Dict:
     ---------
         HTTPException 404 if user doesn't exists.
     """
-    profile = db.get_profile(key=key)
+    profile = users_db.get_profile(key=key)
     if not profile:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
     name = ''
@@ -160,7 +160,7 @@ def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
         elif updates[item] != None:
             updates_to_keep[item] = updates[item]
 
-    if not db.update_profile(key=user['key'], **updates_to_keep):
+    if not users_db.update_profile(key=user['key'], **updates_to_keep):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': 'Profile updated.'}
 
@@ -182,7 +182,7 @@ def update_profile_pic(user: Dict, image: UploadFile) -> Dict:
         HTTPException 500 if drive/database error.
     """
     # Delete existing image file.
-    db_user = db.get_profile(key=user['key'])
+    db_user = users_db.get_profile(key=user['key'])
     if db_user['profile_pic'] != 'NA':
         image_url = db_user['profile_pic']
         filename = image_url.split('/')[-1]
@@ -192,8 +192,8 @@ def update_profile_pic(user: Dict, image: UploadFile) -> Dict:
     filename = image_drive.upload_image(image=image, key=user['key'])
     if not filename:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
-    url = settings.IMAGE_SERVER_PATH + filename
-    if not db.update_profile(key=user['key'], profile_pic=url):
+    url = settings.IMAGE_DRIVE_PATH + filename
+    if not users_db.update_profile(key=user['key'], profile_pic=url):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': {'profile_pic': url}}
 
@@ -213,13 +213,13 @@ def delete_profile_pic(user: Dict):
     ---------
         HTTPException 500 if database error.
     """
-    user_profile = db.get_profile(key=user['key'])
+    user_profile = users_db.get_profile(key=user['key'])
     image_url = user_profile['profile_pic']
     if image_url:
         filename = image_url.split('/')[-1]
         if not image_drive.delete_image(filename=filename):
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
-        if not db.update_profile(key=user['key'], profile_pic='NA'):
+        if not users_db.update_profile(key=user['key'], profile_pic='NA'):
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': 'Profile picture deleted.'}
 
@@ -241,7 +241,7 @@ def _update_password(key: str, new_password: str) -> Dict:
     ---------
         HTTPException 500 if database error.
     """
-    if not db.update_password(key=key, new_password=new_password):
+    if not users_db.update_password(key=key, new_password=new_password):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail={'ERROR': 'Internal Error.'})
     return {'detail': 'Password updated.'}
 
@@ -283,13 +283,13 @@ def forgot_password(data: models.ForgotPassword, task: BackgroundTasks) -> Dict:
         HTTPException 404 if user not found.
         HTTPException 500 if database error.
     """
-    user = db.get_user_by_email(email=data.email)
+    user = users_db.get_user_by_email(email=data.email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': "User doesn't exists."})
 
     verification_code = string_utils.verification_code()
 
-    if db.add_password_reset_request(key=verification_code, user_key=user['key']):
+    if users_db.add_password_reset_request(key=verification_code, user_key=user['key']):
         email.send_password_verification_email(background_tasks=task, email_to=user['email'],
                                                name=user['first_name'], code=verification_code)
         return {'detail': 'Verification code sent.'}
@@ -313,7 +313,7 @@ def reset_password(data: models.ResetPassword) -> Dict:
     ---------
         HTTPException 400 if invalid verification code.
     """
-    request = db.verify_password_reset_request(key=data.verification_code)
+    request = users_db.verify_password_reset_request(key=data.verification_code)
     if not request:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': "Request doesn't exists."})
     return _update_password(key=request['user_key'], new_password=data.new_password)

@@ -36,8 +36,8 @@ BASE_RESOURCE = _DETA.Base('resource')
 DRIVE_IMAGE = _DETA.Drive('images')
 DRIVE_DOC = _DETA.Drive('documents')
 
-IMAGE_SERVER_PATH = HOSTNAME + '/files/image/'
-DOCUMENT_SERVER_PATH = HOSTNAME + '/files/document/'
+IMAGE_DRIVE_PATH = HOSTNAME + '/drive/image/'
+DOCUMENT_DRIVE_PATH = HOSTNAME + '/drive/document/'
 
 # JWT
 JWT_SECRET_KEY = config('JWT_SECRET_KEY')
