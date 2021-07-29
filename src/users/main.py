@@ -150,14 +150,14 @@ def update_profile(user: Dict, updates: models.ProfileUpdate) -> Dict:
     updates = updates.dict()
     updates_to_keep = {}
 
-    if updates['skills'] != ['skill']:
+    if updates['skills'] != ['str']:
         updates_to_keep['skills'] = updates['skills']
     updates.pop('skills')
 
     for item in updates:
         if updates[item] == '':
             updates_to_keep[item] = 'NA'
-        elif updates[item] != None:
+        elif updates[item] != 'str':
             updates_to_keep[item] = updates[item]
 
     if not users_db.update_profile(key=user['key'], **updates_to_keep):
