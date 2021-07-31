@@ -45,5 +45,6 @@ class Resource(BaseModel):
 
 class Resources(BaseModel):
     """Resources of a subject."""
+    SUBJECT_NAME: str
     LIBRARY: List[Resource]
     EXAM: List[Resource]

@@ -140,16 +140,19 @@ def get_resources(subject: str):
 
     Raises:
     ---------
-        HTTPException 404 if resources not available.
+        HTTPException 400 if invalid subject code.
     """
-    resources = academics_db.get_resources(subject=subject)
-    if not resources:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={'ERROR': 'No resources.'})
+    db_subject = academics_db.get_subject(key=subject)
+    if not db_subject:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail={'ERROR': 'Invalid subject code.'})
 
     data = {
+        'SUBJECT_NAME': db_subject['name'],
         'LIBRARY': [],
         'EXAM': []
     }
+
+    resources = academics_db.get_resources(subject=subject)
 
     for resource in resources:
         if resource['category'] == 'library':

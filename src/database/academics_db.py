@@ -30,6 +30,20 @@ def get_subject_of_sem(semester: int) -> Optional[List[Dict]]:
         return None
 
 
+def get_subject(key: str) -> Optional[Dict]:
+    """Fetch subject with matching key.
+
+    Arguments:
+    ---------
+        key: Subject code.
+
+    Returns:
+    ---------
+        Subject Dictionaries if subject code is valid else None.
+    """
+    return BASE_SUBJECT.get(key=key)
+
+
 def get_subjects(year: Optional[int] = 0) -> Optional[List[Dict]]:
     """Fetch list of subjects.
 

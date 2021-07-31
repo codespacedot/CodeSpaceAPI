@@ -68,6 +68,20 @@ def test_get_subjects_200():
     ]
 
 
+# Test for successful response for get subject resources.
+def test_get_resources_200():
+    response = client.get('/api/academics/resources/CS211')
+    assert response.status_code == 200
+    assert response.json()['SUBJECT_NAME'] == 'Discrete Mathematical Structure'
+
+
+# Test for invalid subject code response for get subject resources.
+def test_get_resources_400():
+    response = client.get('/api/academics/resources/CS156')
+    assert response.status_code == 400
+    assert response.json() == {'detail': {'ERROR': 'Invalid subject code.'}}
+
+
 # Test for invalid semester response for get subjects.
 def test_get_subjects_400():
     response = client.get('/api/academics/subjects?semester=1')
