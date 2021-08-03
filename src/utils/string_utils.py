@@ -31,7 +31,7 @@ def verification_code() -> str:
 def file_name(name: str, key: str) -> str:
     """Generate file name.
 
-    Generate a random file name based on current UTC timestamp and specified key.
+    Generate a random file name.
 
     Arguments:
     ---------
@@ -40,6 +40,6 @@ def file_name(name: str, key: str) -> str:
 
     Returns:
     ---------
-        Alphanumeric code of length 'src.settings.VERIFICATION_CODE_LENGTH'
+        File name based on current UTC timestamp and specified key.
     """
     return datetime.utcnow().strftime(f'%Y%m%d%H%M%S{key}') + '.' + name.split('.')[1]
